@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yoseph Keisi | Mechanical Engineer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #141414;
+            --bg-card: #1a1a1a;
+            --bg-card-hover: #222222;
+            --text-primary: #f0f0f0;
+            --text-secondary: #9a9a9a;
+            --text-muted: #606060;
+            --accent: #8b9a4b;
+            --accent-bright: #a3b55a;
+            --accent-dim: #6b7a3b;
+            --border: #2a2a2a;
+            --font-mono: 'IBM Plex Mono', monospace;
+            --font-sans: 'IBM Plex Sans', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            font-weight: 400;
+        }
+
+        /* Subtle grid background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(139, 154, 75, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(139, 154, 75, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 1.5rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 10, 10, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+        }
+
+        .logo {
+            font-family: var(--font-mono);
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--accent);
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s ease;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 8rem 3rem 4rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .hero-label {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .hero h1 {
+            font-family: var(--font-mono);
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 600;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -2px;
+        }
+
+        .hero h1 span {
+            color: var(--accent);
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin-bottom: 2.5rem;
+            font-weight: 300;
+        }
+
+        .hero-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .tag {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            letter-spacing: 0.5px;
+        }
+
+        /* Section Styling */
+        section {
+            padding: 6rem 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .section-number {
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            color: var(--accent);
+        }
+
+        .section-title {
+            font-family: var(--font-mono);
+            font-size: 1.5rem;
+            font-weight: 500;
+            letter-spacing: -0.5px;
+        }
+
+        .section-line {
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        /* About Section */
+        .about-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 4rem;
+        }
+
+        .about-text {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            font-weight: 300;
+        }
+
+        .about-text p {
+            margin-bottom: 1.5rem;
+        }
+
+        .skills-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .skill-category h4 {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--accent);
+            margin-bottom: 0.75rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .skill-list {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        .cert-badge {
+            display: inline-block;
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            padding: 0.2rem 0.5rem;
+            background: var(--accent-dim);
+            color: var(--text-primary);
+            margin-left: 0.25rem;
+            vertical-align: middle;
+        }
+
+        /* Projects Section */
+        .projects-grid {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .project-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 2.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 3px;
+            height: 100%;
+            background: var(--accent);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .project-card:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--accent-dim);
+        }
+
+        .project-card:hover::before {
+            transform: scaleY(1);
+        }
+
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .project-number {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--accent);
+        }
+
+        .project-year {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .project-title {
+            font-family: var(--font-mono);
+            font-size: 1.3rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.5px;
+        }
+
+        .project-subtitle {
+            font-size: 0.95rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        .project-description {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            font-weight: 300;
+        }
+
+        .project-highlights {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .project-highlights li {
+            color: var(--text-secondary);
+            font-weight: 300;
+            padding-left: 1.25rem;
+            position: relative;
+            margin-bottom: 0.5rem;
+        }
+
+        .project-highlights li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-family: var(--font-mono);
+        }
+
+        .project-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .project-tech span {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            padding: 0.35rem 0.75rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+        }
+
+        /* Project Details Dropdown */
+        .project-details-toggle {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--accent);
+            background: none;
+            border: 1px solid var(--accent-dim);
+            padding: 0.6rem 1.2rem;
+            cursor: pointer;
+            margin-top: 1.5rem;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .project-details-toggle:hover {
+            background: var(--accent-dim);
+            color: var(--text-primary);
+        }
+
+        .project-details-toggle .arrow {
+            transition: transform 0.3s ease;
+            font-size: 0.7rem;
+        }
+
+        .project-details-toggle.active .arrow {
+            transform: rotate(180deg);
+        }
+
+        .project-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease, padding 0.3s ease;
+            border-top: none;
+        }
+
+        .project-details.open {
+            max-height: none;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            margin-top: 1.5rem;
+        }
+
+        .details-section {
+            margin-bottom: 2.5rem;
+        }
+
+        .details-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .details-section h4 {
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            letter-spacing: 0.5px;
+        }
+
+        .details-section p {
+            color: var(--text-secondary);
+            font-weight: 300;
+            margin-bottom: 1rem;
+        }
+
+        .details-image {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid var(--border);
+            margin-bottom: 0.75rem;
+        }
+
+        .details-image-caption {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .details-grid-item h5 {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .details-grid-item p {
+            font-size: 0.9rem;
+        }
+
+        /* Contact Section */
+        .contact-content {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .contact-content p {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+
+        .contact-email {
+            font-family: var(--font-mono);
+            font-size: 1.5rem;
+            color: var(--accent);
+            text-decoration: none;
+            display: inline-block;
+            padding: 1rem 2rem;
+            border: 1px solid var(--accent);
+            transition: all 0.3s ease;
+        }
+
+        .contact-email:hover {
+            background: var(--accent);
+            color: var(--bg-primary);
+        }
+
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .contact-links a {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .contact-links a:hover {
+            color: var(--accent);
+        }
+
+        /* Footer */
+        footer {
+            padding: 2rem 3rem;
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+
+        footer p {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem 1.5rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero, section {
+                padding: 4rem 1.5rem;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .project-card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">YK</div>
+        <ul class="nav-links">
+            <li><a href="#about">About</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <header class="hero">
+        <span class="hero-label">Mechanical Engineer</span>
+        <h1>Yoseph <span>Keisi</span></h1>
+        <p class="hero-subtitle">Engineering solutions at the intersection of computational fluid dynamics, embedded control systems, and precision mechanical design. Research assistant specializing in CFD analysis and aerodynamic optimization.</p>
+        <div class="hero-tags">
+            <span class="tag">CFD & Aerodynamics</span>
+            <span class="tag">Electromechanical Systems</span>
+            <span class="tag">Software & Controls</span>
+            <span class="tag">Biomedical Applications</span>
+        </div>
+    </header>
+
+    <section id="about">
+        <div class="section-header">
+            <span class="section-number">01</span>
+            <h2 class="section-title">About</h2>
+            <div class="section-line"></div>
+        </div>
+        <div class="about-content">
+            <div class="about-text">
+                <p>I'm a mechanical engineer and researcher at the University of South Florida's Thermofluids Discovery Laboratory, graduating December 2025. My research focuses on CFD validation and genetic algorithm optimization of airfoil geometries, with a first-author publication in progress.</p>
+                <p>Beyond simulation, I build physical systems—from NASA-sponsored lunar surface hardware to autonomous vehicles with custom motor control circuits. I'm drawn to work that bridges computational analysis with hands-on engineering, particularly in aerospace, propulsion, and advanced manufacturing.</p>
+                <p>I've led software development for lunar surface hardware, designed electromechanical control systems, and built data acquisition tools for physiological signal processing. Beyond aerodynamics and controls, I bring working knowledge in life sciences and biomedical applications—giving me a systems-level perspective across aerospace, medical devices, and advanced manufacturing.</p>
+            </div>
+            <div class="skills-grid">
+                <div class="skill-category">
+                    <h4>Simulation & Analysis</h4>
+                    <p class="skill-list">ANSYS Fluent, MATLAB, Simulink, LabVIEW, ParaView</p>
+                </div>
+                <div class="skill-category">
+                    <h4>Design & CAD</h4>
+                    <p class="skill-list">SolidWorks <span class="cert-badge">CSWA</span> <span class="cert-badge">AM Cert</span>, GD&T, DFM/DFA</p>
+                </div>
+                <div class="skill-category">
+                    <h4>Hardware & Controls</h4>
+                    <p class="skill-list">Microcontrollers (Arduino, MSP430), Motor Control & Actuation, PWM/ADC/UART, Analog & Digital Circuit Design, Sensor Integration, Data Acquisition</p>
+                </div>
+                <div class="skill-category">
+                    <h4>Programming</h4>
+                    <p class="skill-list">Python, C, MATLAB, Embedded C</p>
+                </div>
+                <div class="skill-category">
+                    <h4>Languages</h4>
+                    <p class="skill-list">English (Native), Arabic (Fluent), Spanish (Proficient)</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects">
+        <div class="section-header">
+            <span class="section-number">02</span>
+            <h2 class="section-title">Projects</h2>
+            <div class="section-line"></div>
+        </div>
+        <div class="projects-grid">
+            <article class="project-card">
+                <div class="project-header">
+                    <span class="project-number">01</span>
+                    <span class="project-year">2025</span>
+                </div>
+                <h3 class="project-title">CFD Validation & Genetic Optimization of a 2D NACA 2412 Airfoil</h3>
+                <p class="project-subtitle">First-Author Research Publication</p>
+                <ul class="project-highlights">
+                    <li>Validated ANSYS Fluent simulations against NASA experimental benchmarks, achieving lift and drag coefficient errors under 10% across multiple angles of attack</li>
+                    <li>Optimized SST Transitional turbulence model for accurate laminar-to-turbulent transition prediction with boundary layer resolution (y+ < 1) and mesh-independent results</li>
+                    <li>Collaborating with faculty and PhD researchers to apply Python-based genetic algorithm optimization, identifying geometries that reduce drag and improve aerodynamic efficiency</li>
+                    <li>Preparing findings for peer-reviewed publication as lead author</li>
+                </ul>
+                <div class="project-tech">
+                    <span>ANSYS Fluent</span>
+                    <span>Python</span>
+                    <span>Genetic Algorithms</span>
+                    <span>SST Transitional Model</span>
+                    <span>ParaView</span>
+                </div>
+                <button class="project-details-toggle" onclick="toggleDetails(this)">
+                    View Technical Details <span class="arrow">▼</span>
+                </button>
+                <div class="project-details">
+                    <div class="details-section">
+                        <h4>Mesh Development & Independence Study</h4>
+                        <p>Developed a structured C-grid topology with progressive refinement toward the airfoil surface to resolve boundary layer gradients. Conducted a systematic mesh independence study, iterating through increasingly fine meshes until lift and drag coefficients converged within acceptable tolerance. The final mesh balances computational efficiency with the resolution required for accurate transition prediction.</p>
+                        <img src="final-mesh.png" alt="Final computational mesh for NACA 2412 airfoil" class="details-image">
+                        <p class="details-image-caption">Final mesh topology — C-grid with inflation layers for boundary layer resolution (y+ < 1)</p>
+                    </div>
+                    <div class="details-section">
+                        <h4>Turbulence Model Calibration</h4>
+                        <p>The SST Transitional model's Cθt parameter controls transition onset sensitivity. Systematic variation revealed that reducing Cθt from default values promoted earlier transition, which decreased drag underprediction. Verification of earlier transition behavior confirmed predictions aligned more closely with experimental observations, with optimal accuracy occurring near Cθt = 0.0007.</p>
+                        <img src="cthetat-error.png" alt="Effect of Cθt on prediction error" class="details-image">
+                        <p class="details-image-caption">Effect of Cθt variation on aerodynamic prediction error for NACA 2412 at Re = 3.1×10⁶</p>
+                    </div>
+                    <div class="details-section">
+                        <h4>Baseline vs. Optimized Geometry Analysis</h4>
+                        <p>The genetic algorithm produced an optimized airfoil geometry that outperforms the baseline NACA 2412 in lift generation. Post-processing in ParaView revealed the mechanism: the optimized shape introduces localized surface perturbations near the trailing edge that create enhanced pressure differentials—analogous to the dimple effect on a golf ball, where controlled surface features manipulate boundary layer behavior to improve aerodynamic performance.</p>
+                    </div>
+                    <div class="details-section">
+                        <h4>Pressure Field Comparison</h4>
+                        <p>The difference plot (bottom) highlights regions where the optimized geometry generates stronger pressure gradients, particularly near the trailing edge where the perturbations create localized high-pressure zones on the lower surface.</p>
+                        <img src="pressure-contours.png" alt="Pressure contour comparison" class="details-image">
+                        <p class="details-image-caption">Static pressure [Pa] — Top: Baseline | Middle: Optimized | Bottom: Difference (Optimized − Baseline)</p>
+                    </div>
+                    <div class="details-section">
+                        <h4>Velocity Field Comparison</h4>
+                        <p>Velocity contours show how the optimized geometry accelerates flow over the upper surface while maintaining attached flow. The difference plot reveals subtle changes in the wake structure and trailing edge behavior.</p>
+                        <img src="velocity-contours.png" alt="Velocity contour comparison" class="details-image">
+                        <p class="details-image-caption">Velocity magnitude [m/s] — Top: Baseline | Middle: Optimized | Bottom: Difference (Optimized − Baseline)</p>
+                    </div>
+                    <div class="details-section">
+                        <h4>Turbulent Kinetic Energy Comparison</h4>
+                        <p>TKE contours illustrate the transition behavior and wake turbulence characteristics. The optimized geometry shows modified turbulence development in the trailing edge region, indicating the surface perturbations are actively influencing boundary layer transition and separation characteristics.</p>
+                        <img src="tke-contours.png" alt="TKE contour comparison" class="details-image">
+                        <p class="details-image-caption">Turbulent Kinetic Energy [m²/s²] — Top: Baseline | Middle: Optimized | Bottom: Difference (Optimized − Baseline)</p>
+                    </div>
+                </div>
+            </article>
+
+            <article class="project-card">
+                <div class="project-header">
+                    <span class="project-number">02</span>
+                    <span class="project-year">2025</span>
+                </div>
+                <h3 class="project-title">Lunar Regolith Compactor</h3>
+                <p class="project-subtitle">NASA R&D Capstone – RE-RASSOR Rover Attachment</p>
+                <ul class="project-highlights">
+                    <li>Partnered with Florida Space Institute at UCF to design a compaction attachment for NASA's RE-RASSOR lunar rover prototype</li>
+                    <li>Selected vibratory compaction over force-based methods after research showed pressure fractures regolith into finer particles, worsening compaction</li>
+                    <li>Developed control software automating the full compaction cycle and assembled the complete electromechanical system</li>
+                    <li>Conducted 2-DOF vibration analysis in MATLAB to identify optimal excitation frequencies for lunar gravity conditions</li>
+                </ul>
+                <div class="project-tech">
+                    <span>Arduino</span>
+                    <span>MATLAB</span>
+                    <span>SolidWorks</span>
+                    <span>Vibration Analysis</span>
+                    <span>Circuit Design</span>
+                </div>
+                <button class="project-details-toggle" onclick="toggleDetails(this)">
+                    View Technical Details <span class="arrow">▼</span>
+                </button>
+                <div class="project-details">
+                    <div class="details-section">
+                        <h4>Problem Statement</h4>
+                        <p>NASA's RE-RASSOR rover is designed to excavate and transport lunar regolith for in-situ resource utilization. The Florida Space Institute at UCF tasked our team with developing an attachment capable of compacting excavated regolith for construction applications on the lunar surface. The challenge: lunar regolith behaves differently than terrestrial soil, and conventional force-based compaction actually fractures the particles into finer grains—making the material harder to consolidate.</p>
+                    </div>
+                    <div class="details-section">
+                        <h4>Design Approach</h4>
+                        <p>Based on literature review of regolith mechanics, we selected vibratory compaction as the densification method. Vibration allows particles to rearrange and settle into tighter packing without the destructive fracturing caused by static pressure. The final design uses a dual-plate system with an array of penetrating pins that transmit vibration directly into the regolith bed. The mechanism lowers into loose material, vibrates at a tuned frequency to achieve densification, then retracts—all automated through a single command.</p>
+                        <img src="compactor-cad.png" alt="Compactor CAD model" class="details-image">
+                        <p class="details-image-caption">SolidWorks assembly — dual-plate vibratory pin compactor with linear actuator and eccentric mass motors</p>
+                    </div>
+                    <div class="details-section">
+                        <h4>Electromechanical Integration</h4>
+                        <p>I designed and assembled the complete electrical system: Arduino microcontroller driving a linear actuator for vertical deployment, with eccentric rotating mass (ERM) motors generating the vibration. Wrote the control sequence that coordinates lowering, vibration duration, and retraction—architected for future integration with the RE-RASSOR's onboard control system.</p>
+                        <img src="compactor-prototype.jpg" alt="Physical prototype" class="details-image">
+                        <p class="details-image-caption">Working prototype with 12V power system, linear actuator, and dual ERM vibration motors</p>
+                    </div>
+                    <div class="details-section">
+                        <h4>Vibration Dynamics Analysis</h4>
+                        <p>To determine optimal excitation frequency, I modeled the system as a 2-DOF mass-spring-damper in MATLAB and computed the frequency response for both Earth and lunar gravity conditions. The analysis revealed that resonance occurs at significantly lower frequencies on the Moon (~87 Hz) compared to Earth (~133 Hz) due to reduced gravitational stiffness effects on the regolith bed. This informed our motor selection and PWM tuning strategy.</p>
+                        <img src="compactor-frequency.jpg" alt="Frequency response analysis" class="details-image">
+                        <p class="details-image-caption">2-DOF frequency response — Moon (blue) shows lower resonant frequency and higher displacement amplitude than Earth (red)</p>
+                    </div>
+                </div>
+            </article>
+
+            <article class="project-card">
+                <div class="project-header">
+                    <span class="project-number">03</span>
+                    <span class="project-year">2023</span>
+                </div>
+                <h3 class="project-title">Mechanical Record Player Design</h3>
+                <p class="project-subtitle">Concept-to-CAD Product Design</p>
+                <ul class="project-highlights">
+                    <li>Designed a futuristic record player from scratch in SolidWorks—fully mechanical interior with every component manufacturable</li>
+                    <li>Reverse-engineered Audio-Technica AT-LP60X to study tonearm kinematics and belt-drive mechanics</li>
+                    <li>Created complete engineering documentation including 23-part BOM, exploded views, and kinematic diagrams</li>
+                    <li>Received high marks from faculty for innovation, mechanical feasibility, and design-for-manufacture considerations</li>
+                </ul>
+                <div class="project-tech">
+                    <span>SolidWorks</span>
+                    <span>Assembly Modeling</span>
+                    <span>GD&T</span>
+                    <span>Design for Manufacture</span>
+                    <span>Technical Drawing</span>
+                </div>
+                <button class="project-details-toggle" onclick="toggleDetails(this)">
+                    View Technical Details <span class="arrow">▼</span>
+                </button>
+                <div class="project-details">
+                    <div class="details-section">
+                        <h4>Design Philosophy</h4>
+                        <p>This project combined my passion for music and record collecting with mechanical engineering fundamentals. The goal was to create a visually striking, futuristic turntable that wasn't just a render—every internal component had to be mechanically sound and actually manufacturable. The aesthetic draws from mid-century modern and contemporary industrial design while maintaining full functionality.</p>
+                        <img src="recordplayer.jpg" alt="Record player render" class="details-image">
+                        <p class="details-image-caption">Final SolidWorks render — belt-drive turntable with integrated tonearm assembly</p>
+                    </div>
+                    <div class="details-section">
+                        <h4>Engineering Documentation</h4>
+                        <p>The complete assembly consists of 23 individual parts, each modeled with realistic material properties and manufacturing constraints. The BOM includes off-the-shelf components (6061 aluminum hardware, silicon-nitride ceramic bearings, steel ball bearings) alongside custom-designed parts—demonstrating understanding of hybrid sourcing strategies in product development.</p>
+                        <img src="recordplayer-bom.jpg" alt="Bill of materials and exploded view" class="details-image">
+                        <p class="details-image-caption">Exploded view with bill of materials — 23-part assembly with material callouts</p>
+                    </div>
+                    <div class="details-section">
+                        <h4>Kinematic Design</h4>
+                        <p>The tonearm mechanism required careful attention to pivot geometry and counterweight balance. The design allows for both vertical rotation (for needle drop and lift) and horizontal tracking across the record surface. Friction and counterweight were tuned to provide stable needle tracking without excessive downforce that could damage vinyl grooves.</p>
+                        <img src="recordplayer-views.jpg" alt="Tonearm kinematic views" class="details-image">
+                        <p class="details-image-caption">Alternate views showing tonearm vertical/horizontal rotation axes and turntable drive</p>
+                    </div>
+                </div>
+            </article>
+
+            <article class="project-card">
+                <div class="project-header">
+                    <span class="project-number">04</span>
+                    <span class="project-year">2023</span>
+                </div>
+                <h3 class="project-title">Cardiac Flow Signal Processing</h3>
+                <p class="project-subtitle">Biomedical Data Analysis in MATLAB</p>
+                <ul class="project-highlights">
+                    <li>Processed real anonymized patient cardiac MRI data to analyze left ventricular blood flow during exercise</li>
+                    <li>Implemented signal smoothing, peak/trough detection algorithms, and automated cardiac cycle segmentation</li>
+                    <li>Applied trapezoidal numerical integration to compute stroke volume estimates for each heartbeat</li>
+                    <li>Generated statistical analysis and visualizations to characterize heart function under exercise load</li>
+                </ul>
+                <div class="project-tech">
+                    <span>MATLAB</span>
+                    <span>Signal Processing</span>
+                    <span>Numerical Integration</span>
+                    <span>Biomedical Data</span>
+                    <span>Statistical Analysis</span>
+                </div>
+                <button class="project-details-toggle" onclick="toggleDetails(this)">
+                    View Technical Details <span class="arrow">▼</span>
+                </button>
+                <div class="project-details">
+                    <div class="details-section">
+                        <h4>Clinical Context</h4>
+                        <p>This project analyzed real MRI-derived blood flow measurements from a patient's left ventricle during exercise. The goal was to segment individual heartbeats from continuous flow data and quantify cardiac output—information that helps researchers understand how diseased hearts respond to increased physiological demand. Working with authentic clinical data required careful handling of noise and biological variability.</p>
+                    </div>
+                    <div class="details-section">
+                        <h4>Signal Processing Pipeline</h4>
+                        <p>Raw flow measurements contained significant noise that obscured the underlying cardiac cycles. I implemented a smoothing filter to clean the signal while preserving the physiologically relevant waveform features. A custom peak detection algorithm identified systolic maxima based on threshold and local gradient criteria, then searched backward from each peak to locate the corresponding trough—marking the start of each cardiac cycle.</p>
+                        <img src="cardiac-smoothed.jpg" alt="Smoothed flow with detected troughs" class="details-image">
+                        <p class="details-image-caption">Smoothed flow signal with automatically detected cycle starting points (troughs)</p>
+                    </div>
+                    <div class="details-section">
+                        <h4>Cycle Segmentation & Overlay</h4>
+                        <p>Using the detected troughs as boundaries, the algorithm segmented the continuous recording into individual cardiac cycles. Overlaying all cycles on a common time axis revealed the consistency of the patient's heart function—the tight clustering indicates stable stroke volume across beats despite exercise conditions.</p>
+                        <img src="cardiac-cycles.jpg" alt="Overlaid cardiac cycles" class="details-image">
+                        <p class="details-image-caption">All cardiac cycles aligned and overlaid — consistent waveform morphology across heartbeats</p>
+                    </div>
+                    <div class="details-section">
+                        <h4>Numerical Integration & Statistics</h4>
+                        <p>For each cardiac cycle, I computed the area under the flow curve using trapezoidal integration—this area represents the volume of blood ejected per beat. Statistical analysis yielded a mean stroke volume of 97,708 ± 6,438 (arbitrary units), with the histogram showing approximately normal distribution indicating healthy, consistent cardiac function.</p>
+                        <img src="cardiac-histogram.jpg" alt="Histogram of cycle areas" class="details-image">
+                        <p class="details-image-caption">Distribution of stroke volumes across all detected cardiac cycles</p>
+                    </div>
+                </div>
+            </article>
+
+            <article class="project-card">
+                <div class="project-header">
+                    <span class="project-number">05</span>
+                    <span class="project-year">2024</span>
+                </div>
+                <h3 class="project-title">Autonomous Maze Navigation Vehicle</h3>
+                <p class="project-subtitle">Embedded Systems & Mechatronics</p>
+                <ul class="project-highlights">
+                    <li>Led electrical system design and programming for an autonomous robot capable of maze navigation and object retrieval</li>
+                    <li>Implemented ultrasonic sensor array for wall detection and path planning, IR sensors for object identification and color classification</li>
+                    <li>Built the chassis structure and contributed to overall mechanical assembly</li>
+                    <li>Successfully completed competition maze, collecting multiple objects with high evaluation marks from faculty</li>
+                </ul>
+                <div class="project-tech">
+                    <span>Arduino</span>
+                    <span>Ultrasonic Sensors</span>
+                    <span>IR Sensors</span>
+                    <span>Motor Control</span>
+                    <span>SolidWorks</span>
+                </div>
+                <button class="project-details-toggle" onclick="toggleDetails(this)">
+                    View Technical Details <span class="arrow">▼</span>
+                </button>
+                <div class="project-details">
+                    <div class="details-section">
+                        <h4>System Overview</h4>
+                        <p>The challenge: build an autonomous vehicle that navigates an unknown maze, identifies colored objects, picks them up, and deposits them in a target zone—all without human input. I owned the electrical architecture and control software, integrating multiple sensor systems into a cohesive navigation and manipulation pipeline.</p>
+                        <img src="mazerobot.jpg" alt="Maze navigation robot" class="details-image">
+                        <p class="details-image-caption">Competition-ready robot with ultrasonic array, IR sensors, mecanum wheels, and custom grabber</p>
+                    </div>
+                    <div class="details-section">
+                        <h4>Sensor Integration & Control Logic</h4>
+                        <p>Ultrasonic sensors provided distance measurements for wall-following and obstacle avoidance, feeding into a state machine that handled turns, dead ends, and path selection. IR sensors detected object presence and color—triggering the grab sequence when a target was identified. The control code synchronized sensor polling, motor commands, and actuator timing to achieve smooth autonomous operation.</p>
+                    </div>
+                    <div class="details-section">
+                        <h4>Grabber Mechanism</h4>
+                        <p>The robot featured a gear-driven grabber capable of grasping cylindrical objects and lifting them for transport. The mechanism was compact enough to fit within the robot's footprint while providing sufficient grip force and lift height to clear maze walls during transit.</p>
+                        <img src="grabber-drawing.jpg" alt="Grabber mechanism drawing" class="details-image">
+                        <p class="details-image-caption">Technical drawing of gear-driven grabber assembly</p>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <section id="contact">
+        <div class="section-header">
+            <span class="section-number">03</span>
+            <h2 class="section-title">Contact</h2>
+            <div class="section-line"></div>
+        </div>
+        <div class="contact-content">
+            <p>Currently seeking full-time opportunities in aerospace, propulsion, energy systems, or advanced manufacturing. Open to relocation.</p>
+            <a href="mailto:ykeisi@outlook.com" class="contact-email">ykeisi@outlook.com</a>
+            <div class="contact-links">
+                <a href="https://www.linkedin.com/in/yoseph-keisi" target="_blank">LinkedIn</a>
+                <!-- <a href="#">Resume</a> -->
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2025 Yoseph Keisi</p>
+    </footer>
+
+    <script>
+        function toggleDetails(button) {
+            button.classList.toggle('active');
+            const details = button.nextElementSibling;
+            details.classList.toggle('open');
+            
+            // Update button text
+            const isOpen = details.classList.contains('open');
+            button.innerHTML = isOpen 
+                ? 'Hide Technical Details <span class="arrow">▼</span>'
+                : 'View Technical Details <span class="arrow">▼</span>';
+        }
+    </script>
+</body>
+</html>
