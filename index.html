@@ -566,7 +566,7 @@
         <div class="about-content">
             <div class="about-text">
                 <p>I'm a mechanical engineer and researcher at the University of South Florida's Thermofluids Discovery Laboratory, graduating December 2025. My research focuses on CFD validation and genetic algorithm optimization of airfoil geometries, with a first-author publication in progress.</p>
-                <p>Beyond simulation, I build physical systems—from NASA-sponsored lunar surface hardware to autonomous vehicles with custom motor control circuits. I'm drawn to work that bridges computational analysis with hands-on engineering, particularly in aerospace, energy systems, and electromechanical design.</p>
+                <p>Beyond simulation, I build physical systems, from NASA-sponsored lunar surface hardware to autonomous vehicles with custom motor control circuits. I'm drawn to work that bridges computational analysis with hands-on engineering, particularly in aerospace, energy systems, and electromechanical design.</p>
                 <p>I've led software development for lunar surface hardware, designed electromechanical control systems, and built data acquisition tools for physiological signal processing. Beyond aerodynamics and computational mechanics, I bring working knowledge in life sciences and biomedical applications, giving me a systems-level perspective across biomechanics, medical devices, and engineered systems.</p>
             </div>
             <div class="skills-grid">
@@ -629,7 +629,7 @@
                         <h4>Mesh Development & Independence Study</h4>
                         <p>Developed a structured C-grid topology with progressive refinement toward the airfoil surface to resolve boundary layer gradients. Conducted a systematic mesh independence study, iterating through increasingly fine meshes until lift and drag coefficients converged within acceptable tolerance. The final mesh balances computational efficiency with the resolution required for accurate transition prediction.</p>
                         <img src="final-mesh.png" alt="Final computational mesh for NACA 2412 airfoil" class="details-image">
-                        <p class="details-image-caption">Final mesh topology — C-grid with inflation layers for boundary layer resolution (y+ < 1)</p>
+                        <p class="details-image-caption">Final mesh topology: C-grid with inflation layers for boundary layer resolution (y+ < 1)</p>
                     </div>
                     <div class="details-section">
                         <h4>Turbulence Model Calibration</h4>
@@ -639,31 +639,31 @@
                     </div>
                     <div class="details-section">
                         <h4>Genetic Algorithm Optimization</h4>
-                        <p>With validated CFD methodology established, a Python-based genetic algorithm was implemented to search for improved airfoil geometries. The optimization ran for 70 generations using a staggered approach, with population sizes and mutation variance (10–15%) tuned to balance exploration and convergence. The fitness curve shows rapid initial improvement followed by gradual refinement as the algorithm honed in on high-performing geometries.</p>
+                        <p>With validated CFD methodology established, a Python-based genetic algorithm was implemented to search for improved airfoil geometries. The optimization ran for 70 generations using a staggered approach, with population sizes and mutation variance (10-15%) tuned to balance exploration and convergence. The fitness curve shows rapid initial improvement followed by gradual refinement as the algorithm honed in on high-performing geometries.</p>
                         <img src="best_fitness_per_generation_70gens.png" alt="Fitness per generation over 70 generations" class="details-image">
-                        <p class="details-image-caption">Best fitness per generation — 70-generation optimization with staggered population and 10–15% variance</p>
+                        <p class="details-image-caption">Best fitness per generation over 70 generations with staggered population and 10-15% variance</p>
                     </div>
                     <div class="details-section">
                         <h4>Baseline vs. Optimized Geometry Analysis</h4>
-                        <p>The genetic algorithm produced an optimized airfoil geometry that outperforms the baseline NACA 2412 in lift generation. Post-processing in ParaView revealed the mechanism: the optimized shape introduces localized surface perturbations near the trailing edge that create enhanced pressure differentials—analogous to the dimple effect on a golf ball, where controlled surface features manipulate boundary layer behavior to improve aerodynamic performance.</p>
+                        <p>The genetic algorithm produced an optimized airfoil geometry that outperforms the baseline NACA 2412 in lift generation. Post-processing in ParaView revealed the mechanism: the optimized shape introduces localized surface perturbations near the trailing edge that create enhanced pressure differentials, analogous to the dimple effect on a golf ball, where controlled surface features manipulate boundary layer behavior to improve aerodynamic performance.</p>
                     </div>
                     <div class="details-section">
                         <h4>Pressure Field Comparison</h4>
                         <p>The difference plot (bottom) highlights regions where the optimized geometry generates stronger pressure gradients, particularly near the trailing edge where the perturbations create localized high-pressure zones on the lower surface.</p>
                         <img src="pressure-contours.png" alt="Pressure contour comparison" class="details-image">
-                        <p class="details-image-caption">Static pressure [Pa] — Top: Baseline | Middle: Optimized | Bottom: Difference (Optimized − Baseline)</p>
+                        <p class="details-image-caption">Static pressure [Pa] | Top: Baseline | Middle: Optimized | Bottom: Difference (Optimized − Baseline)</p>
                     </div>
                     <div class="details-section">
                         <h4>Velocity Field Comparison</h4>
                         <p>Velocity contours show how the optimized geometry accelerates flow over the upper surface while maintaining attached flow. The difference plot reveals subtle changes in the wake structure and trailing edge behavior.</p>
                         <img src="velocity-contours.png" alt="Velocity contour comparison" class="details-image">
-                        <p class="details-image-caption">Velocity magnitude [m/s] — Top: Baseline | Middle: Optimized | Bottom: Difference (Optimized − Baseline)</p>
+                        <p class="details-image-caption">Velocity magnitude [m/s] | Top: Baseline | Middle: Optimized | Bottom: Difference (Optimized − Baseline)</p>
                     </div>
                     <div class="details-section">
                         <h4>Turbulent Kinetic Energy Comparison</h4>
                         <p>TKE contours illustrate the transition behavior and wake turbulence characteristics. The optimized geometry shows modified turbulence development in the trailing edge region, indicating the surface perturbations are actively influencing boundary layer transition and separation characteristics.</p>
                         <img src="tke-contours.png" alt="TKE contour comparison" class="details-image">
-                        <p class="details-image-caption">Turbulent Kinetic Energy [m²/s²] — Top: Baseline | Middle: Optimized | Bottom: Difference (Optimized − Baseline)</p>
+                        <p class="details-image-caption">Turbulent Kinetic Energy [m²/s²] | Top: Baseline | Middle: Optimized | Bottom: Difference (Optimized − Baseline)</p>
                     </div>
                 </div>
             </article>
@@ -674,7 +674,7 @@
                     <span class="project-year">2025</span>
                 </div>
                 <h3 class="project-title">Lunar Regolith Compactor</h3>
-                <p class="project-subtitle">NASA R&D Capstone – RE-RASSOR Rover Attachment</p>
+                <p class="project-subtitle">NASA R&D Capstone | RE-RASSOR Rover Attachment</p>
                 <ul class="project-highlights">
                     <li>Partnered with Florida Space Institute at UCF to design a compaction attachment for NASA's RE-RASSOR lunar rover prototype</li>
                     <li>Selected vibratory compaction over force-based methods after research showed pressure fractures regolith into finer particles, worsening compaction</li>
@@ -694,17 +694,17 @@
                 <div class="project-details">
                     <div class="details-section">
                         <h4>Problem Statement</h4>
-                        <p>NASA's RE-RASSOR rover is designed to excavate and transport lunar regolith for in-situ resource utilization. The Florida Space Institute at UCF tasked our team with developing an attachment capable of compacting excavated regolith for construction applications on the lunar surface. The challenge: lunar regolith behaves differently than terrestrial soil, and conventional force-based compaction actually fractures the particles into finer grains—making the material harder to consolidate.</p>
+                        <p>NASA's RE-RASSOR rover is designed to excavate and transport lunar regolith for in-situ resource utilization. The Florida Space Institute at UCF tasked our team with developing an attachment capable of compacting excavated regolith for construction applications on the lunar surface. The challenge: lunar regolith behaves differently than terrestrial soil, and conventional force-based compaction actually fractures the particles into finer grains, making the material harder to consolidate.</p>
                     </div>
                     <div class="details-section">
                         <h4>Design Approach</h4>
-                        <p>Based on literature review of regolith mechanics, we selected vibratory compaction as the densification method. Vibration allows particles to rearrange and settle into tighter packing without the destructive fracturing caused by static pressure. The final design uses a dual-plate system with an array of penetrating pins that transmit vibration directly into the regolith bed. The mechanism lowers into loose material, vibrates at a tuned frequency to achieve densification, then retracts—all automated through a single command.</p>
+                        <p>Based on literature review of regolith mechanics, we selected vibratory compaction as the densification method. Vibration allows particles to rearrange and settle into tighter packing without the destructive fracturing caused by static pressure. The final design uses a dual-plate system with an array of penetrating pins that transmit vibration directly into the regolith bed. The mechanism lowers into loose material, vibrates at a tuned frequency to achieve densification, then retracts, all automated through a single command.</p>
                         <img src="compactor-cad.png" alt="Compactor CAD model" class="details-image">
-                        <p class="details-image-caption">SolidWorks assembly — dual-plate vibratory pin compactor with linear actuator and eccentric mass motors</p>
+                        <p class="details-image-caption">SolidWorks assembly: dual-plate vibratory pin compactor with linear actuator and eccentric mass motors</p>
                     </div>
                     <div class="details-section">
                         <h4>Electromechanical Integration</h4>
-                        <p>I co-designed and assembled the complete electrical system: Arduino microcontroller driving a linear actuator for vertical deployment, with eccentric rotating mass (ERM) motors generating the vibration. Wrote the control sequence that coordinates lowering, vibration duration, and retraction—architected for future integration with the RE-RASSOR's onboard control system.</p>
+                        <p>I co-designed and assembled the complete electrical system: Arduino microcontroller driving a linear actuator for vertical deployment, with eccentric rotating mass (ERM) motors generating the vibration. Wrote the control sequence that coordinates lowering, vibration duration, and retraction, architected for future integration with the RE-RASSOR's onboard control system.</p>
                         <img src="compactor-prototype.jpg" alt="Physical prototype" class="details-image">
                         <p class="details-image-caption">Working prototype with 12V power system, linear actuator, and dual ERM vibration motors</p>
                     </div>
@@ -712,7 +712,7 @@
                         <h4>Vibration Dynamics Analysis</h4>
                         <p>To determine optimal excitation frequency, I modeled the system as a 2-DOF mass-spring-damper in MATLAB and computed the frequency response for both Earth and lunar gravity conditions. The analysis revealed that resonance occurs at significantly lower frequencies on the Moon (~87 Hz) compared to Earth (~133 Hz) due to reduced gravitational stiffness effects on the regolith bed. This informed our motor selection and PWM tuning strategy.</p>
                         <img src="compactor-frequency.jpg" alt="Frequency response analysis" class="details-image">
-                        <p class="details-image-caption">2-DOF frequency response — Moon (blue) shows lower resonant frequency and higher displacement amplitude than Earth (red)</p>
+                        <p class="details-image-caption">2-DOF frequency response: Moon (blue) shows lower resonant frequency and higher displacement amplitude than Earth (red)</p>
                     </div>
                 </div>
             </article>
@@ -725,7 +725,7 @@
                 <h3 class="project-title">Mechanical Record Player Design</h3>
                 <p class="project-subtitle">Concept-to-CAD Product Design</p>
                 <ul class="project-highlights">
-                    <li>Designed a futuristic record player from scratch in SolidWorks—fully mechanical interior with every component manufacturable</li>
+                    <li>Designed a futuristic record player from scratch in SolidWorks with a fully mechanical interior where every component is manufacturable</li>
                     <li>Reverse-engineered Audio-Technica AT-LP60X to study tonearm kinematics and belt-drive mechanics</li>
                     <li>Created complete engineering documentation including 23-part BOM, exploded views, and kinematic diagrams</li>
                     <li>Received high marks from faculty for innovation, mechanical feasibility, and design-for-manufacture considerations</li>
@@ -743,15 +743,15 @@
                 <div class="project-details">
                     <div class="details-section">
                         <h4>Design Philosophy</h4>
-                        <p>This project combined my passion for music and record collecting with mechanical engineering fundamentals. The goal was to create a visually striking, futuristic turntable that wasn't just a render—every internal component had to be mechanically sound and actually manufacturable. The aesthetic draws from mid-century modern and contemporary industrial design while maintaining full functionality.</p>
+                        <p>This project combined my passion for music and record collecting with mechanical engineering fundamentals. The goal was to create a visually striking, futuristic turntable that wasn't just a render. Every internal component had to be mechanically sound and actually manufacturable. The aesthetic draws from mid-century modern and contemporary industrial design while maintaining full functionality.</p>
                         <img src="recordplayer.jpg" alt="Record player render" class="details-image">
-                        <p class="details-image-caption">Final SolidWorks render — belt-drive turntable with integrated tonearm assembly</p>
+                        <p class="details-image-caption">Final SolidWorks render: belt-drive turntable with integrated tonearm assembly</p>
                     </div>
                     <div class="details-section">
                         <h4>Engineering Documentation</h4>
-                        <p>The complete assembly consists of 23 individual parts, each modeled with realistic material properties and manufacturing constraints. The BOM includes off-the-shelf components (6061 aluminum hardware, silicon-nitride ceramic bearings, steel ball bearings) alongside custom-designed parts—demonstrating understanding of hybrid sourcing strategies in product development.</p>
+                        <p>The complete assembly consists of 23 individual parts, each modeled with realistic material properties and manufacturing constraints. The BOM includes off-the-shelf components (6061 aluminum hardware, silicon-nitride ceramic bearings, steel ball bearings) alongside custom-designed parts, demonstrating understanding of hybrid sourcing strategies in product development.</p>
                         <img src="recordplayer-bom.jpg" alt="Bill of materials and exploded view" class="details-image">
-                        <p class="details-image-caption">Exploded view with bill of materials — 23-part assembly with material callouts</p>
+                        <p class="details-image-caption">Exploded view with bill of materials: 23-part assembly with material callouts</p>
                     </div>
                     <div class="details-section">
                         <h4>Kinematic Design</h4>
@@ -788,23 +788,23 @@
                 <div class="project-details">
                     <div class="details-section">
                         <h4>Clinical Context</h4>
-                        <p>This project analyzed real MRI-derived blood flow measurements from a patient's left ventricle during exercise. The goal was to segment individual heartbeats from continuous flow data and quantify cardiac output—information that helps researchers understand how diseased hearts respond to increased physiological demand. Working with authentic clinical data required careful handling of noise and biological variability.</p>
+                        <p>This project analyzed real MRI-derived blood flow measurements from a patient's left ventricle during exercise. The goal was to segment individual heartbeats from continuous flow data and quantify cardiac output, information that helps researchers understand how diseased hearts respond to increased physiological demand. Working with authentic clinical data required careful handling of noise and biological variability.</p>
                     </div>
                     <div class="details-section">
                         <h4>Signal Processing Pipeline</h4>
-                        <p>Raw flow measurements contained significant noise that obscured the underlying cardiac cycles. We implemented a smoothing filter to clean the signal while preserving the physiologically relevant waveform features. A custom peak detection algorithm identified systolic maxima based on threshold and local gradient criteria, then searched backward from each peak to locate the corresponding trough—marking the start of each cardiac cycle.</p>
+                        <p>Raw flow measurements contained significant noise that obscured the underlying cardiac cycles. We implemented a smoothing filter to clean the signal while preserving the physiologically relevant waveform features. A custom peak detection algorithm identified systolic maxima based on threshold and local gradient criteria, then searched backward from each peak to locate the corresponding trough, marking the start of each cardiac cycle.</p>
                         <img src="cardiac-smoothed.jpg" alt="Smoothed flow with detected troughs" class="details-image">
                         <p class="details-image-caption">Smoothed flow signal with automatically detected cycle starting points (troughs)</p>
                     </div>
                     <div class="details-section">
                         <h4>Cycle Segmentation & Overlay</h4>
-                        <p>Using the detected troughs as boundaries, the algorithm segmented the continuous recording into individual cardiac cycles. Overlaying all cycles on a common time axis revealed the consistency of the patient's heart function—the tight clustering indicates stable stroke volume across beats despite exercise conditions.</p>
+                        <p>Using the detected troughs as boundaries, the algorithm segmented the continuous recording into individual cardiac cycles. Overlaying all cycles on a common time axis revealed the consistency of the patient's heart function. The tight clustering indicates stable stroke volume across beats despite exercise conditions.</p>
                         <img src="cardiac-cycles.jpg" alt="Overlaid cardiac cycles" class="details-image">
-                        <p class="details-image-caption">All cardiac cycles aligned and overlaid — consistent waveform morphology across heartbeats</p>
+                        <p class="details-image-caption">All cardiac cycles aligned and overlaid, showing consistent waveform morphology across heartbeats</p>
                     </div>
                     <div class="details-section">
                         <h4>Numerical Integration & Statistics</h4>
-                        <p>For each cardiac cycle, we computed the area under the flow curve using trapezoidal integration—this area represents the volume of blood ejected per beat. Statistical analysis yielded a mean stroke volume of 97,708 ± 6,438 (arbitrary units), with the histogram showing approximately normal distribution indicating healthy, consistent cardiac function.</p>
+                        <p>For each cardiac cycle, we computed the area under the flow curve using trapezoidal integration. This area represents the volume of blood ejected per beat. Statistical analysis yielded a mean stroke volume of 97,708 ± 6,438 (arbitrary units), with the histogram showing approximately normal distribution indicating healthy, consistent cardiac function.</p>
                         <img src="cardiac-histogram.jpg" alt="Histogram of cycle areas" class="details-image">
                         <p class="details-image-caption">Distribution of stroke volumes across all detected cardiac cycles</p>
                     </div>
@@ -843,7 +843,7 @@
                     </div>
                     <div class="details-section">
                         <h4>Sensor Integration & Control Logic</h4>
-                        <p>Ultrasonic sensors provided distance measurements for wall-following and obstacle avoidance, feeding into a state machine that handled turns, dead ends, and path selection. IR sensors detected object presence and color—triggering the grab sequence when a target was identified. The control code synchronized sensor polling, motor commands, and actuator timing to achieve smooth autonomous operation.</p>
+                        <p>Ultrasonic sensors provided distance measurements for wall-following and obstacle avoidance, feeding into a state machine that handled turns, dead ends, and path selection. IR sensors detected object presence and color, triggering the grab sequence when a target was identified. The control code synchronized sensor polling, motor commands, and actuator timing to achieve smooth autonomous operation.</p>
                     </div>
                     <div class="details-section">
                         <h4>Grabber Mechanism</h4>
@@ -864,7 +864,7 @@
         </div>
         <div class="contact-content">
             <p>Currently seeking full-time opportunities.<br>Open to relocation.</p>
-            <a href="/cdn-cgi/l/email-protection#c4bdafa1adb7ad84abb1b0a8ababafeaa7aba9" class="contact-email"><span class="__cf_email__" data-cfemail="bac3d1dfd3c9d3fad5cfced6d5d5d194d9d5d7">[email&#160;protected]</span></a>
+            <a href="mailto:ykeisi@outlook.com" class="contact-email">ykeisi@outlook.com</a>
             <div class="contact-links">
                 <a href="https://www.linkedin.com/in/yoseph-keisi" target="_blank">LinkedIn</a>
                 <!-- <a href="#">Resume</a> -->
@@ -876,11 +876,18 @@
         <p>2025 Yoseph Keisi</p>
     </footer>
 
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    <script>
         function toggleDetails(button) {
             button.classList.toggle('active');
             const details = button.nextElementSibling;
             details.classList.toggle('open');
             
             // Update button text
-            const isOpen = details.classList.conta
+            const isOpen = details.classList.contains('open');
+            button.innerHTML = isOpen 
+                ? 'Hide Technical Details <span class="arrow">▼</span>'
+                : 'View Technical Details <span class="arrow">▼</span>';
+        }
+    </script>
+</body>
+</html>
