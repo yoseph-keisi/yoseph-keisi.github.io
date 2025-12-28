@@ -638,6 +638,12 @@
                         <p class="details-image-caption">Effect of Cθt variation on aerodynamic prediction error for NACA 2412 at Re = 3.1×10⁶</p>
                     </div>
                     <div class="details-section">
+                        <h4>Genetic Algorithm Optimization</h4>
+                        <p>With validated CFD methodology established, a Python-based genetic algorithm was implemented to search for improved airfoil geometries. The optimization ran for 70 generations using a staggered approach, with population sizes and mutation variance (10–15%) tuned to balance exploration and convergence. The fitness curve shows rapid initial improvement followed by gradual refinement as the algorithm honed in on high-performing geometries.</p>
+                        <img src="best_fitness_per_generation_70gens.png" alt="Fitness per generation over 70 generations" class="details-image">
+                        <p class="details-image-caption">Best fitness per generation — 70-generation optimization with staggered population and 10–15% variance</p>
+                    </div>
+                    <div class="details-section">
                         <h4>Baseline vs. Optimized Geometry Analysis</h4>
                         <p>The genetic algorithm produced an optimized airfoil geometry that outperforms the baseline NACA 2412 in lift generation. Post-processing in ParaView revealed the mechanism: the optimized shape introduces localized surface perturbations near the trailing edge that create enhanced pressure differentials—analogous to the dimple effect on a golf ball, where controlled surface features manipulate boundary layer behavior to improve aerodynamic performance.</p>
                     </div>
@@ -858,7 +864,7 @@
         </div>
         <div class="contact-content">
             <p>Currently seeking full-time opportunities, open to relocation.</p>
-            <a href="mailto:ykeisi@outlook.com" class="contact-email">ykeisi@outlook.com</a>
+            <a href="/cdn-cgi/l/email-protection#c4bdafa1adb7ad84abb1b0a8ababafeaa7aba9" class="contact-email"><span class="__cf_email__" data-cfemail="bac3d1dfd3c9d3fad5cfced6d5d5d194d9d5d7">[email&#160;protected]</span></a>
             <div class="contact-links">
                 <a href="https://www.linkedin.com/in/yoseph-keisi" target="_blank">LinkedIn</a>
                 <!-- <a href="#">Resume</a> -->
@@ -870,18 +876,11 @@
         <p>2025 Yoseph Keisi</p>
     </footer>
 
-    <script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
         function toggleDetails(button) {
             button.classList.toggle('active');
             const details = button.nextElementSibling;
             details.classList.toggle('open');
             
             // Update button text
-            const isOpen = details.classList.contains('open');
-            button.innerHTML = isOpen 
-                ? 'Hide Technical Details <span class="arrow">▼</span>'
-                : 'View Technical Details <span class="arrow">▼</span>';
-        }
-    </script>
-</body>
-</html>
+            const isOpen = details.classList.conta
