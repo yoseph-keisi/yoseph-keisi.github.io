@@ -293,14 +293,47 @@
     /* ═══════════════════════════════════════════════════════════════
        ABOUT – BENTO GRID
     ═══════════════════════════════════════════════════════════════ */
+    .about-preview {
+        background: var(--bg-card);
+        border: 1px solid var(--accent-border);
+        padding: 1.75rem;
+        box-shadow: var(--shadow-card);
+    }
+    .about-preview-text {
+        font-size: 0.94rem; color: var(--text-secondary);
+        line-height: 1.84; margin-bottom: 1.25rem;
+    }
+    .about-domains {
+        display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.5rem;
+    }
+    .about-domains span {
+        font-family: var(--font-mono); font-size: 0.64rem;
+        padding: 0.25rem 0.6rem;
+        background: var(--bg-secondary); border: 1px solid var(--accent-border);
+        color: var(--accent); letter-spacing: 0.5px;
+    }
+    .about-toggle-btn {
+        font-family: var(--font-mono); font-size: 0.72rem;
+        color: var(--accent); letter-spacing: 0.5px;
+        background: none; border: none; padding: 0; cursor: pointer;
+        display: inline-flex; align-items: center; gap: 0.5rem;
+        transition: gap 0.25s ease, opacity 0.25s ease;
+    }
+    .about-toggle-btn:hover { gap: 0.9rem; }
+    .about-toggle-btn .arrow { display: inline-block; transition: transform 0.3s ease; }
+    .about-toggle-btn.active .arrow { transform: rotate(180deg); }
+
     .about-bento {
         display: grid;
         grid-template-columns: repeat(12, 1fr);
         gap: 1px;
         background: var(--accent-border);
         border: 1px solid var(--accent-border);
+        border-top: none;
         box-shadow: var(--shadow-card);
+        overflow: hidden; height: 0;
     }
+    .about-bento.open { height: auto; }
     .bento-cell {
         background: var(--bg-primary); padding: 1.75rem;
         transition: background 0.2s ease;
@@ -959,7 +992,7 @@
         .projects-grid .project-card:nth-child(5) { order: 5; }
         .projects-grid .project-card:nth-child(6) { order: 6; }
         .eng-divider { padding: 0 1.5rem; }
-        .about-bento { display: flex; flex-direction: column; }
+        .about-bento.open { display: flex; flex-direction: column; }
         .bento-cell { border-bottom: 1px solid var(--accent-border); }
         .bento-photo { min-height: 220px; }
         .bento-stats { flex-direction: column; }
@@ -1036,6 +1069,22 @@
             <h2 class="section-title">About</h2>
             <div class="section-line"></div>
         </div>
+        <div class="about-preview anim-fade">
+            <div class="about-preview-text">
+                I am a Mechanical Engineer (B.S., University of South Florida, 2025) specializing in the intersection of computational simulation and high-stakes hardware systems. My work focuses on bridging the gap between theoretical optimization and physical deployment, with applications spanning aerospace, biomedical, and energy systems.
+            </div>
+            <div class="about-domains">
+                <span>CFD &amp; Aerodynamics</span>
+                <span>Electromechanical Systems</span>
+                <span>Embedded Systems</span>
+                <span>Software Development</span>
+                <span>Scientific ML</span>
+            </div>
+            <button class="about-toggle-btn" onclick="toggleAbout(this)">
+                <span>View Full Profile</span><span class="arrow">&#9660;</span>
+            </button>
+        </div>
+
         <div class="about-bento anim-fade">
 
             <div class="bento-cell bento-about">
@@ -2190,6 +2239,35 @@
         });
     }, { threshold: 0.4 });
     sections.forEach(s => navObserver.observe(s));
+
+    // About section expand/collapse
+    function toggleAbout(btn) {
+        const bento = document.querySelector('.about-bento');
+        const isOpening = !bento.classList.contains('open');
+        btn.classList.toggle('active');
+        if (isOpening) {
+            bento.classList.add('open');
+            bento.style.height = 'auto';
+            const h = bento.offsetHeight;
+            bento.style.height = '0px';
+            bento.style.overflow = 'hidden';
+            gsap.to(bento, {
+                height: h, duration: 0.5, ease: 'power2.out',
+                onComplete() { bento.style.height = 'auto'; bento.style.overflow = ''; }
+            });
+            btn.querySelector('span:first-child').textContent = 'Collapse Profile';
+        } else {
+            gsap.to(bento, {
+                height: 0, duration: 0.35, ease: 'power2.in',
+                onComplete() {
+                    bento.classList.remove('open');
+                    bento.style.height = '';
+                    bento.style.overflow = 'hidden';
+                }
+            });
+            btn.querySelector('span:first-child').textContent = 'View Full Profile';
+        }
+    }
 
     // Interactive Airfoil button — always targets project 01's last slide
     const _airfoilCard = document.querySelector('.projects-grid .project-card');
