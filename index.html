@@ -509,10 +509,7 @@
         display: flex; justify-content: space-between; align-items: center;
         margin-bottom: 0.4rem;
     }
-    .card-overlay .project-number {
-        font-family: var(--font-mono); font-size: 0.68rem;
-        color: var(--accent-bright); letter-spacing: 1px;
-    }
+    .card-overlay .project-number { display: none; }
     .card-overlay .project-year {
         font-family: var(--font-mono); font-size: 0.68rem;
         color: rgba(255,255,255,0.38);
@@ -1062,7 +1059,9 @@
         <div class="eng-divider-line"></div>
     </div>
 
-    <!-- ── About ────────────────────────────────────────────────────── -->
+    <!-- ── About ──────────────────────────────────────────
+     
+    ──────────── -->
     <section id="about">
         <div class="section-header anim-fade">
             <span class="section-number">// 01</span>
