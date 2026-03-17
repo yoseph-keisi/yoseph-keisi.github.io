@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(code --list-extensions:*)",
+      "Bash(code --install-extension:*)",
+      "Bash(python convert_figures.py)",
+      "Bash(python3 \"c:\\\\Users\\\\ykeis\\\\OneDrive\\\\Desktop\\\\yoseph-keisi.github.io-main\\\\convert_figures.py\")",
+      "Bash(py \"c:\\\\Users\\\\ykeis\\\\OneDrive\\\\Desktop\\\\yoseph-keisi.github.io-main\\\\convert_figures.py\")",
+      "Bash(python3 -m pip install pillow pymupdf)",
+      "Bash(where py:*)",
+      "Bash(py --version)",
+      "Bash(\"/c/Users/ykeis/AppData/Local/Programs/Python/Python313/python.exe\" -m pip install pillow pymupdf)",
+      "Bash(cmd /c \"C:\\\\Users\\\\ykeis\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python313\\\\python.exe\" -m pip install pillow pymupdf)"
+    ]
+  }
+}

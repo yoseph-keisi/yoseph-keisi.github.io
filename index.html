@@ -1,0 +1,2222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yoseph Keisi | Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <style>
+    /* ═══════════════════════════════════════════════════════════════
+       TOKENS
+    ═══════════════════════════════════════════════════════════════ */
+    :root {
+        --bg-primary:    #FFFFFF;
+        --bg-secondary:  #F9F9F9;
+        --bg-card:       #FFFFFF;
+        --bg-card-hover: #F7F7F3;
+        --text-primary:  #1a1a1a;
+        --text-secondary:#4a4a4a;
+        --text-muted:    #8a8a8a;
+        --accent:        #556B2F;
+        --accent-bright: #6B8E23;
+        --accent-dim:    rgba(85,107,47,0.10);
+        --accent-border: rgba(85,107,47,0.18);
+        --border:        rgba(0,0,0,0.07);
+        --font-mono:     'JetBrains Mono', monospace;
+        --font-sans:     'Inter', sans-serif;
+        --shadow-lift:   0 16px 48px rgba(85,107,47,0.10), 0 4px 16px rgba(0,0,0,0.06);
+        --shadow-card:   0 2px 8px rgba(0,0,0,0.05);
+        --spring:        cubic-bezier(0.34,1.56,0.64,1);
+        --ease-out:      cubic-bezier(0.25,1.0,0.5,1);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       RESET & BASE
+    ═══════════════════════════════════════════════════════════════ */
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+        font-family: var(--font-sans);
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        line-height: 1.6;
+        font-weight: 400;
+        overflow-x: hidden;
+    }
+
+    /* ── Blueprint Grid (fixed bg) ─────────────────────────────── */
+    body::before {
+        content: '';
+        position: fixed; inset: 0;
+        background-image:
+            linear-gradient(rgba(85,107,47,0.05)  1px, transparent 1px),
+            linear-gradient(90deg,rgba(85,107,47,0.05)  1px, transparent 1px),
+            linear-gradient(rgba(85,107,47,0.015) 1px, transparent 1px),
+            linear-gradient(90deg,rgba(85,107,47,0.015) 1px, transparent 1px);
+        background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
+        pointer-events: none; z-index: 0;
+    }
+    nav, header, section, footer, #lightbox { position: relative; z-index: 1; }
+    #project-modal { pointer-events: none; } /* GSAP controls visibility */
+
+    /* ═══════════════════════════════════════════════════════════════
+       SCROLL PROGRESS BAR
+    ═══════════════════════════════════════════════════════════════ */
+    #scroll-progress {
+        position: fixed; top: 0; left: 0;
+        height: 2px; width: 0%;
+        background: linear-gradient(to right, var(--accent), var(--accent-bright));
+        z-index: 2001;
+        transition: width 0.08s linear;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       NAVIGATION
+    ═══════════════════════════════════════════════════════════════ */
+    nav {
+        position: fixed; top: 0; left: 0; right: 0;
+        padding: 1.2rem 3rem;
+        display: flex; justify-content: space-between; align-items: center;
+        background: rgba(255,255,255,0.92);
+        backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+        border-bottom: 1px solid var(--accent-border);
+        z-index: 1000;
+        transition: box-shadow 0.3s ease;
+    }
+    nav.scrolled { box-shadow: 0 4px 24px rgba(85,107,47,0.08); }
+
+    .logo {
+        font-family: var(--font-mono); font-weight: 700;
+        font-size: 1rem; color: var(--accent); letter-spacing: -0.5px;
+        cursor: default;
+    }
+    .logo .cursor {
+        display: inline-block; opacity: 1;
+        animation: blink 1.1s step-end infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+        font-family: var(--font-mono); font-size: 0.78rem;
+        color: var(--text-muted); text-decoration: none;
+        letter-spacing: 1px; text-transform: uppercase;
+        position: relative; padding-bottom: 2px;
+        transition: color 0.2s ease;
+    }
+    /* Animated underline */
+    .nav-links a::after {
+        content: ''; position: absolute;
+        bottom: -1px; left: 0;
+        width: 0; height: 1px;
+        background: var(--accent);
+        transition: width 0.25s ease;
+    }
+    .nav-links a:hover::after,
+    .nav-links a.active::after { width: 100%; }
+    .nav-links a:hover,
+    .nav-links a.active { color: var(--accent); }
+
+    /* ═══════════════════════════════════════════════════════════════
+       HERO
+    ═══════════════════════════════════════════════════════════════ */
+    .hero {
+        min-height: 100vh;
+        display: flex; flex-direction: column; justify-content: center;
+        padding: 8rem 3rem 4rem;
+        max-width: 1200px; margin: 0 auto;
+        position: relative;
+    }
+
+    /* Canvas streamlines (behind content) */
+    #hero-canvas {
+        position: absolute; inset: 0;
+        width: 100%; height: 100%;
+        pointer-events: none; z-index: 0;
+        opacity: 1;
+    }
+    .hero > *:not(#hero-canvas) { position: relative; z-index: 1; }
+
+    .hero-coords {
+        font-family: var(--font-mono); font-size: 0.7rem;
+        color: var(--text-muted); margin-bottom: 1.2rem;
+        letter-spacing: 0.5px; opacity: 0; /* GSAP reveals */
+    }
+
+    .hero-label {
+        font-family: var(--font-mono); font-size: 0.78rem;
+        color: var(--accent); margin-bottom: 1.5rem;
+        letter-spacing: 2px; text-transform: uppercase;
+        display: flex; align-items: center; gap: 0.8rem;
+        opacity: 0;
+    }
+    .hero-label::before {
+        content: ''; display: inline-block;
+        width: 22px; height: 1px; background: var(--accent); flex-shrink: 0;
+    }
+
+    /* h1 word-reveal structure */
+    .h1-wrap { overflow: hidden; margin-bottom: 1.5rem; }
+    .hero h1 {
+        font-family: var(--font-mono);
+        font-size: clamp(2.8rem, 6.5vw, 5rem);
+        font-weight: 700; line-height: 1.05;
+        letter-spacing: -2.5px;
+        transform: translateY(110%); /* GSAP reveals */
+    }
+    .accent-word { position: relative; color: var(--accent); }
+    .name-sweep {
+        position: absolute; inset: -0.05em -0.08em;
+        background: rgba(85,107,47,0.10);
+        transform: scaleX(0); transform-origin: left;
+        pointer-events: none;
+    }
+
+    .hero-subtitle {
+        font-size: 1.08rem; color: var(--text-secondary);
+        max-width: 580px; margin-bottom: 2.5rem;
+        font-weight: 400; line-height: 1.78; opacity: 0;
+    }
+
+    /* Hero nav buttons */
+    .hero-actions {
+        display: flex; gap: 0.65rem; flex-wrap: wrap;
+        margin-bottom: 2rem; opacity: 0; /* GSAP reveals */
+    }
+    .hero-action-btn {
+        font-family: var(--font-sans); font-size: 0.88rem; font-weight: 500;
+        color: var(--text-primary); text-decoration: none;
+        display: inline-flex; align-items: center; gap: 0.5rem;
+        padding: 0.72rem 1.5rem;
+        background: var(--bg-secondary);
+        border: 1px solid rgba(0,0,0,0.1);
+        border-radius: 2px;
+        letter-spacing: 0.01em;
+        transition: background 0.22s ease, border-color 0.22s ease,
+                    color 0.22s ease, transform 0.22s var(--spring), box-shadow 0.22s ease;
+    }
+    .hero-action-btn::after { content: '↗\FE0E'; font-size: 0.78rem; opacity: 0.45; transition: opacity 0.2s ease, transform 0.2s ease; }
+    .hero-action-btn:hover {
+        background: var(--accent); color: #fff;
+        border-color: var(--accent);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(85,107,47,0.2);
+    }
+    .hero-action-btn:hover::after { opacity: 1; transform: translate(2px,-2px); }
+
+
+    .hero-tags { display: flex; flex-wrap: wrap; gap: 0.55rem; }
+    .tag {
+        font-family: var(--font-mono); font-size: 0.7rem;
+        padding: 0.44rem 0.88rem;
+        background: var(--bg-secondary);
+        border: 1px solid var(--accent-border);
+        color: var(--accent); letter-spacing: 0.5px;
+        opacity: 0; /* GSAP reveals */
+        transition: background 0.22s ease, color 0.22s ease,
+                    transform 0.22s var(--spring), box-shadow 0.22s ease;
+    }
+    .tag:hover {
+        background: var(--accent); color: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(85,107,47,0.2);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       SECTION SHELL
+    ═══════════════════════════════════════════════════════════════ */
+    section {
+        padding: 6rem 3rem;
+        max-width: 1200px; margin: 0 auto;
+    }
+
+    .section-header {
+        display: flex; align-items: center; gap: 1rem;
+        margin-bottom: 3rem;
+    }
+    .section-number {
+        font-family: var(--font-mono); font-size: 0.72rem;
+        color: var(--accent); letter-spacing: 1px;
+    }
+    .section-title {
+        font-family: var(--font-mono); font-size: 1.4rem;
+        font-weight: 600; letter-spacing: -0.5px;
+    }
+    /* Enhanced section-line with blueprint tick marks */
+    .section-line {
+        flex: 1; height: 1px;
+        background:
+            repeating-linear-gradient(
+                to right,
+                transparent 0, transparent 19px,
+                var(--accent-border) 19px, var(--accent-border) 20px
+            ),
+            linear-gradient(to right, var(--accent-border), transparent);
+        position: relative;
+    }
+    .section-line::after {
+        content: ''; position: absolute;
+        right: 0; top: -4px;
+        width: 1px; height: 8px;
+        background: var(--accent-border);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       ENGINEERING SECTION DIVIDER
+    ═══════════════════════════════════════════════════════════════ */
+    .eng-divider {
+        display: flex; align-items: center; gap: 0;
+        padding: 0 3rem; max-width: 1200px; margin: 0 auto;
+        overflow: hidden;
+    }
+    .eng-divider-line {
+        flex: 1; height: 1px;
+        background: linear-gradient(to right, transparent, var(--accent-border) 20%, var(--accent-border) 80%, transparent);
+        position: relative;
+    }
+    .eng-divider-label {
+        font-family: var(--font-mono); font-size: 0.62rem;
+        color: var(--text-muted); padding: 0 1rem;
+        letter-spacing: 1px; white-space: nowrap;
+    }
+    /* Tick marks on divider */
+    .eng-divider-line::before {
+        content: '';
+        position: absolute; left: 0; top: -4px;
+        width: 1px; height: 8px; background: var(--accent-border);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       ABOUT – BENTO GRID
+    ═══════════════════════════════════════════════════════════════ */
+    .about-bento {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: 1px;
+        background: var(--accent-border);
+        border: 1px solid var(--accent-border);
+        box-shadow: var(--shadow-card);
+    }
+    .bento-cell {
+        background: var(--bg-primary); padding: 1.75rem;
+        transition: background 0.2s ease;
+    }
+    .bento-cell:hover { background: var(--bg-secondary); }
+
+    /* Hero avatar (next to name) */
+    .hero-name-row { display: flex; align-items: center; gap: 1.75rem; margin-bottom: 1.5rem; }
+    .hero-avatar {
+        width: 220px; height: 220px; flex-shrink: 0;
+        border-radius: 50%; object-fit: cover; object-position: center top;
+        border: 3px solid var(--accent-border);
+        filter: grayscale(12%);
+        transition: filter 0.4s ease, box-shadow 0.35s ease;
+    }
+    .hero-avatar:hover { filter: grayscale(0%); box-shadow: 0 0 0 5px var(--accent-dim), 0 0 0 7px var(--accent-border); }
+    /* h1-wrap inside the row: no extra margin-bottom (row handles it) */
+    .hero-name-row .h1-wrap { margin-bottom: 0; }
+
+    .bento-about      { grid-column: span 12; }
+    .bento-stats      { grid-column: span 12; background: var(--bg-secondary); display: flex; flex-direction: row; padding: 0; }
+    .bento-stats .bio-stat-wrap { flex: 1; padding: 1.75rem; border-right: 1px solid var(--accent-border); }
+    .bento-stats .bio-stat-wrap:last-child { border-right: none; }
+    .bento-skill-sm   { grid-column: span 4; }
+    .bento-skill-wide { grid-column: span 8; }
+
+    .about-text { font-size: 0.94rem; color: var(--text-secondary); line-height: 1.84; }
+    .about-text p { margin-bottom: 1.2rem; }
+    .about-text p:last-child { margin-bottom: 0; }
+    .about-text strong { font-family: var(--font-mono); font-weight: 600; color: var(--accent); font-size: 0.78rem; letter-spacing: 0.5px; text-transform: uppercase; }
+
+    .bio-stat { font-family: var(--font-mono); }
+    .bio-stat-value {
+        font-size: 2.2rem; font-weight: 700; color: var(--accent);
+        line-height: 1; margin-bottom: 0.2rem;
+        transition: transform 0.3s var(--spring);
+    }
+    .bento-stats:hover .bio-stat-value { transform: scale(1.05); }
+    .bio-stat-label {
+        font-size: 0.66rem; color: var(--text-muted);
+        letter-spacing: 1.2px; text-transform: uppercase;
+    }
+
+    .skill-category h4 {
+        font-family: var(--font-mono); font-size: 0.68rem;
+        color: var(--accent); margin-bottom: 0.7rem;
+        letter-spacing: 1.5px; text-transform: uppercase;
+    }
+    .skill-list {
+        font-size: 0.875rem; color: var(--text-secondary); line-height: 1.9;
+    }
+    .cert-badge {
+        display: inline-block; font-family: var(--font-mono); font-size: 0.62rem;
+        padding: 0.12rem 0.42rem; background: var(--accent); color: #fff;
+        margin-left: 0.25rem; vertical-align: middle; letter-spacing: 0.5px;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       CFD PIPELINE DIAGRAM
+    ═══════════════════════════════════════════════════════════════ */
+    .cfd-pipeline-wrap {
+        background: var(--bg-secondary);
+        border: 1px solid var(--accent-border);
+        padding: 1.5rem 2rem;
+        margin-bottom: 2rem;
+    }
+    .cfd-pipeline-wrap > .pipe-label-top {
+        font-family: var(--font-mono); font-size: 0.68rem;
+        color: var(--accent); letter-spacing: 1.5px; text-transform: uppercase;
+        margin-bottom: 1.25rem;
+    }
+    .cfd-pipeline {
+        display: flex; align-items: center; gap: 0;
+        overflow-x: auto; padding-bottom: 0.25rem;
+    }
+    .pipe-step {
+        flex-shrink: 0;
+        border: 1px solid var(--accent-border);
+        background: var(--bg-primary);
+        padding: 0.75rem 1rem;
+        text-align: center; min-width: 108px;
+        transition: background 0.2s ease, border-color 0.2s ease,
+                    transform 0.3s var(--spring), box-shadow 0.3s ease;
+        opacity: 0; transform: translateY(10px); /* GSAP reveals */
+    }
+    .pipe-step:hover {
+        background: var(--accent-dim);
+        border-color: var(--accent);
+        transform: translateY(-3px);
+        box-shadow: 0 6px 18px rgba(85,107,47,0.12);
+    }
+    .pipe-step-num {
+        font-family: var(--font-mono); font-size: 0.62rem;
+        color: var(--accent); letter-spacing: 1px; margin-bottom: 0.35rem;
+    }
+    .pipe-step-label {
+        font-family: var(--font-mono); font-size: 0.78rem;
+        font-weight: 600; color: var(--text-primary); margin-bottom: 0.2rem;
+    }
+    .pipe-step-sub {
+        font-size: 0.68rem; color: var(--text-muted); line-height: 1.3;
+    }
+    .pipe-connector {
+        flex-shrink: 0; display: flex; align-items: center;
+        padding: 0 4px;
+    }
+    .pipe-connector svg {
+        display: block; overflow: visible;
+    }
+    .pipe-conn-line {
+        stroke: var(--accent-border); stroke-width: 1;
+        fill: none;
+        stroke-dasharray: 48;
+        stroke-dashoffset: 48; /* GSAP animates to 0 */
+    }
+    .pipe-conn-arrow {
+        fill: var(--accent-border);
+        opacity: 0; /* GSAP reveals */
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       PROJECTS — MAGAZINE GRID
+    ═══════════════════════════════════════════════════════════════ */
+    .projects-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+        border: none; background: transparent; box-shadow: none;
+    }
+
+    /* Cards 1, 4, 7… are featured (full-width) */
+    .project-card:nth-child(3n+1) { grid-column: 1 / -1; }
+    .project-card:nth-child(3n+1) .project-preview { height: 280px; }
+
+    .project-card {
+        background: var(--bg-card);
+        border: 1px solid var(--accent-border);
+        padding: 0;
+        position: relative; overflow: hidden; cursor: pointer;
+        transition: box-shadow 0.35s ease, background 0.25s ease, border-color 0.3s ease;
+    }
+    .project-card:hover {
+        background: var(--bg-card-hover);
+        border-color: rgba(85, 107, 47, 0.38);
+        box-shadow: var(--shadow-lift);
+    }
+
+    .project-card::before, .project-card::after { display: none; }
+
+    /* ── Crosshair Tracker ───────────────────────────────────────── */
+    .crosshair-tracker { display: none; }
+
+    /* ── Card Media (video / image container) ───────────────────── */
+    .card-media { position: relative; overflow: hidden; height: 268px; }
+    .project-card:nth-child(3n+1) .card-media { height: 370px; }
+
+    .card-video, .project-preview {
+        width: 100%; height: 100%;
+        object-fit: cover; display: block;
+        transition: transform 0.65s ease;
+    }
+    .project-card:hover .card-video,
+    .project-card:hover .project-preview { transform: scale(1.04); }
+
+    /* Gradient overlay — title lives here */
+    .card-overlay {
+        position: absolute; bottom: 0; left: 0; right: 0;
+        padding: 3.5rem 1.75rem 1.4rem;
+        background: linear-gradient(to bottom,
+            transparent 0%, rgba(0,0,0,0.55) 45%, rgba(0,0,0,0.88) 100%);
+    }
+    .card-overlay-header {
+        display: flex; justify-content: space-between; align-items: center;
+        margin-bottom: 0.4rem;
+    }
+    .card-overlay .project-number {
+        font-family: var(--font-mono); font-size: 0.68rem;
+        color: var(--accent-bright); letter-spacing: 1px;
+    }
+    .card-overlay .project-year {
+        font-family: var(--font-mono); font-size: 0.68rem;
+        color: rgba(255,255,255,0.38);
+    }
+    .card-overlay .project-title {
+        font-family: var(--font-mono); font-size: 1.05rem;
+        font-weight: 600; letter-spacing: -0.4px;
+        color: rgba(255,255,255,0.95); margin-bottom: 0.25rem;
+    }
+    .card-overlay .project-subtitle {
+        font-family: var(--font-mono); font-size: 0.78rem;
+        color: rgba(255,255,255,0.62);
+        margin-bottom: 0; font-weight: 500; letter-spacing: 0.3px;
+    }
+
+    /* ── Content strip below media ───────────────────────────────── */
+    .project-content {
+        position: relative; z-index: 1;
+        padding: 0.9rem 1.75rem 1.05rem;
+        display: flex; align-items: center;
+        border-top: 1px solid var(--accent-border);
+    }
+
+    /* Hidden on card, accessible to modal JS */
+    .project-card .project-highlights   { display: none; }
+    .project-card .project-tech         { display: none; }
+    .project-card .project-details-toggle { display: none; }
+    .project-card .project-details      { display: none; }
+
+    /* Tech tags (modal uses these) */
+    .project-tech { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.5rem; }
+    .project-tech span {
+        font-family: var(--font-mono); font-size: 0.64rem;
+        padding: 0.25rem 0.6rem;
+        background: var(--bg-secondary); border: 1px solid var(--accent-border);
+        color: var(--accent); letter-spacing: 0.5px;
+        transition: background 0.2s ease, color 0.2s ease, transform 0.2s var(--spring);
+    }
+    .project-tech span:hover { background: var(--accent); color: #fff; transform: translateY(-2px); }
+
+    .project-video { width: 100%; border: 1px solid var(--accent-border); margin-bottom: 0.5rem; }
+    .project-video-caption {
+        font-family: var(--font-mono); font-size: 0.7rem;
+        color: var(--text-muted); margin-bottom: 1rem;
+    }
+
+    /* ── "View Project →" label ──────────────────────────────────── */
+    .card-view-label {
+        font-family: var(--font-mono); font-size: 0.72rem;
+        color: var(--accent); letter-spacing: 0.5px;
+        display: inline-flex; align-items: center; gap: 0.5rem;
+        opacity: 0.7; transition: gap 0.25s ease, opacity 0.25s ease;
+    }
+    .project-card:hover .card-view-label { gap: 0.9rem; opacity: 1; }
+
+    /* ── Expanded Details (used inside modal) ────────────────────── */
+    .project-details {
+        overflow: hidden; height: 0;
+    }
+    .project-details.open { margin-top: 0; }
+
+    /* ═══════════════════════════════════════════════════════════════
+       PROJECT DETAIL MODAL
+    ═══════════════════════════════════════════════════════════════ */
+    #modal-overlay {
+        position: fixed; inset: 0;
+        background: rgba(0, 0, 0, 0.32);
+        z-index: 2000; opacity: 0; pointer-events: none;
+    }
+    #modal-overlay.open { pointer-events: all; }
+
+    /* Centered floating card */
+    #project-modal {
+        position: fixed;
+        top: 6vh; left: 50%;
+        width: min(88vw, 1060px);
+        max-height: 86vh;
+        background: var(--bg-primary);
+        border: 1px solid var(--accent-border);
+        box-shadow: 0 40px 100px rgba(0,0,0,0.18), 0 8px 28px rgba(0,0,0,0.10);
+        z-index: 2001; overflow-y: auto; overflow-x: hidden;
+        opacity: 0;
+    }
+
+    .modal-close-btn {
+        position: sticky; top: 1.25rem; float: right;
+        margin: 1.25rem 1.25rem 0 0; z-index: 10;
+        font-family: var(--font-mono); font-size: 1rem; line-height: 1;
+        background: var(--bg-secondary);
+        border: 1px solid var(--accent-border);
+        color: var(--text-muted);
+        width: 34px; height: 34px; cursor: pointer;
+        display: flex; align-items: center; justify-content: center;
+        transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    }
+    .modal-close-btn:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+    .modal-inner { padding: 2rem 2.5rem 4rem; clear: both; }
+
+    /* 16:9 media area */
+    .modal-img-wrap {
+        width: 100%; aspect-ratio: 16 / 9;
+        min-height: 0;
+        position: relative; overflow: hidden;
+        border: 1px solid var(--accent-border); margin-bottom: 2rem;
+        background:
+            linear-gradient(var(--accent-border) 1px, transparent 1px),
+            linear-gradient(90deg, var(--accent-border) 1px, transparent 1px),
+            var(--bg-secondary);
+        background-size: 40px 40px, 40px 40px, auto;
+    }
+    /* When hosting the interactive sim, give it more height */
+    .modal-img-wrap.has-sim { aspect-ratio: unset; height: 520px; }
+
+    .modal-img-wrap img,
+    .modal-img-wrap video {
+        width: 100%; height: 100%; object-fit: cover;
+        display: block; position: absolute; inset: 0;
+    }
+
+    .modal-project-number {
+        font-family: var(--font-mono); font-size: 0.72rem;
+        color: var(--accent); letter-spacing: 1px;
+        display: block; margin-bottom: 0.55rem;
+    }
+    .modal-title {
+        font-family: var(--font-mono);
+        font-size: clamp(1.3rem, 2.8vw, 1.9rem);
+        font-weight: 700; letter-spacing: -0.8px;
+        color: var(--text-primary);
+        margin-bottom: 0.35rem; line-height: 1.2;
+    }
+    .modal-subtitle {
+        font-family: var(--font-mono); font-size: 0.82rem;
+        color: var(--accent); font-weight: 500;
+        margin-bottom: 1.25rem; letter-spacing: 0.3px;
+    }
+
+    /* Section labels inside modal */
+    .modal-section-label {
+        font-family: var(--font-mono); font-size: 0.63rem;
+        color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase;
+        margin: 1.75rem 0 1rem;
+        display: flex; align-items: center; gap: 0.75rem;
+    }
+    .modal-section-label::after { content: ''; flex: 1; height: 1px; background: var(--accent-border); }
+    .modal-section-label:first-child { margin-top: 0; }
+
+    /* Highlights inside modal — prose paragraphs */
+    #modal-body .project-highlights {
+        display: block; margin-bottom: 1.5rem;
+    }
+    #modal-body .project-highlights p {
+        color: var(--text-secondary); font-size: 0.92rem;
+        margin-bottom: 0.9rem; line-height: 1.78;
+    }
+    #modal-body .project-highlights p:last-child { margin-bottom: 0; }
+
+    /* Tech tags in modal */
+    #modal-body .project-tech { margin-bottom: 0; }
+
+    /* Details panel when inside modal */
+    #modal-body .project-details {
+        display: block !important; height: auto !important; overflow: visible !important;
+    }
+
+    /* ── Slideshow Panel (Tab-based) ─────────────────────────────── */
+    .slideshow {
+        border-top: 1px solid var(--accent-border);
+        margin-top: 1.5rem;
+    }
+
+    /* Tab bar */
+    .slide-tabs {
+        display: flex;
+        overflow-x: auto;
+        border-bottom: 1px solid var(--accent-border);
+        scrollbar-width: none;
+        gap: 0;
+        background: var(--bg-secondary);
+    }
+    .slide-tabs::-webkit-scrollbar { display: none; }
+
+    .slide-tab {
+        font-family: var(--font-mono); font-size: 0.68rem;
+        color: var(--text-muted); background: none; border: none;
+        border-bottom: 2px solid transparent;
+        padding: 0.7rem 1.1rem; cursor: pointer;
+        white-space: nowrap; letter-spacing: 0.5px;
+        transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+        flex-shrink: 0; margin-bottom: -1px;
+    }
+    .slide-tab:hover { color: var(--accent); background: var(--accent-dim); }
+    .slide-tab.active {
+        color: var(--accent); border-bottom-color: var(--accent);
+        background: var(--bg-primary);
+    }
+
+    /* Slide viewport */
+    .slide { display: none; }
+    .slide.active { display: block; }
+
+    /* Pipeline wrap inside a slide */
+    .slide .cfd-pipeline-wrap { margin-bottom: 0; }
+
+    /* Slide content padding */
+    .slide-section-wrap { padding: 1.5rem 0; }
+    .slide-two-col,
+    .slide-full { padding: 0; }
+
+    /* Title row above image+text */
+    .slide-section-title {
+        margin-bottom: 1rem;
+        padding-bottom: 0.65rem;
+        border-bottom: 1px solid var(--accent-border);
+    }
+    .slide-section-title h4 {
+        font-family: var(--font-mono); font-size: 0.78rem;
+        color: var(--accent); margin-bottom: 0;
+        letter-spacing: 1px; text-transform: uppercase;
+    }
+
+    /* Two-column layout: image left, text right */
+    .slide-two-col {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        align-items: start;
+    }
+
+    .slide-img-zone .details-image {
+        width: 100%; height: auto;
+        max-height: 280px; object-fit: contain;
+        cursor: zoom-in; display: block;
+        border: 1px solid var(--accent-border);
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        margin-bottom: 0;
+    }
+    /* Multiple images stacked: add gap between pairs */
+    .slide-img-zone .details-image + .details-image,
+    .slide-img-zone .details-image-caption + .details-image {
+        margin-top: 1rem;
+    }
+    .slide-img-zone .details-image:hover {
+        border-color: var(--accent);
+        box-shadow: 0 4px 16px rgba(85,107,47,0.1);
+    }
+    .slide-img-zone .details-image-caption {
+        font-family: var(--font-mono); font-size: 0.65rem;
+        color: var(--text-muted); margin-top: 0.4rem; margin-bottom: 0; line-height: 1.4;
+    }
+    .slide-img-zone .figure-note {
+        font-family: var(--font-mono); font-size: 0.65rem;
+        color: var(--text-muted); padding: 0.4rem 0.65rem;
+        border: 1px dashed var(--accent-border); display: inline-block;
+    }
+
+    /* h4 in text zone only for legacy/non-restructured slides */
+    .slide-text-zone h4 {
+        font-family: var(--font-mono); font-size: 0.78rem;
+        color: var(--accent); margin-bottom: 0.9rem;
+        letter-spacing: 1px; text-transform: uppercase;
+    }
+    .slide-full { padding: 1.5rem 0; }
+    .slide-text-zone p {
+        color: var(--text-secondary); font-size: 0.9rem;
+        margin-bottom: 0.9rem; line-height: 1.74;
+    }
+    .slide-text-zone p:last-child { margin-bottom: 0; }
+
+    /* Full-width slide (text-only or video) */
+    .slide-full h4 {
+        font-family: var(--font-mono); font-size: 0.78rem;
+        color: var(--accent); margin-bottom: 0.9rem;
+        letter-spacing: 1px; text-transform: uppercase;
+    }
+    .slide-full p {
+        color: var(--text-secondary); font-size: 0.9rem;
+        margin-bottom: 0.9rem; line-height: 1.74; max-width: 680px;
+    }
+    .slide-full p:last-child { margin-bottom: 0; }
+
+    /* Side arrow buttons (desktop) */
+    .slide-viewport { position: relative; }
+    .slide-side-btn {
+        position: absolute; top: 50%; transform: translateY(-50%);
+        width: 38px; height: 38px; border-radius: 50%; padding: 0;
+        background: rgba(255,255,255,0.08);
+        backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+        border: 1.5px solid var(--accent);
+        color: var(--accent);
+        /* true optical center for arrow glyphs */
+        display: grid; place-items: center;
+        font-size: 0.95rem; line-height: 1; font-family: var(--font-mono);
+        cursor: pointer; z-index: 5; opacity: 0;
+        transition: opacity 0.25s ease, background 0.22s ease,
+                    border-color 0.22s ease, transform 0.2s var(--spring);
+    }
+    .slide-side-btn.slide-prev { left: 8px; }
+    .slide-side-btn.slide-next { right: 8px; }
+    .slideshow:hover .slide-side-btn:not(:disabled) { opacity: 1; }
+    .slide-side-btn:hover {
+        background: rgba(85,107,47,0.18);
+        border-color: var(--accent-bright);
+        color: var(--accent-bright);
+        transform: translateY(-50%) scale(1.1);
+    }
+    .slide-side-btn:disabled { opacity: 0 !important; pointer-events: none; }
+
+    /* Bottom counter bar */
+    .slide-bottom-nav {
+        display: flex; align-items: center; justify-content: center;
+        padding: 0.85rem 0 0.4rem;
+        border-top: 1px solid var(--accent-border);
+        margin-top: 0.25rem;
+        gap: 1rem;
+    }
+    /* Mobile prev/next fallback (hidden on desktop) */
+    .slide-nav-btn {
+        font-family: var(--font-mono); font-size: 0.72rem;
+        color: var(--accent); background: none;
+        border: 1px solid var(--accent-border);
+        padding: 0.4rem 0.9rem; cursor: pointer;
+        transition: background 0.2s ease, color 0.2s ease;
+        display: none;
+    }
+    .slide-nav-btn:hover:not(:disabled) { background: var(--accent); color: #fff; }
+    .slide-nav-btn:disabled { opacity: 0.22; cursor: default; }
+    .slide-nav-counter {
+        font-family: var(--font-mono); font-size: 0.7rem;
+        color: var(--text-muted); letter-spacing: 1.5px;
+    }
+    @media (max-width: 768px) {
+        .slide-side-btn { display: none; }
+        .slide-nav-btn { display: flex; }
+        .slide-bottom-nav { justify-content: space-between; }
+    }
+
+    /* Fallback for non-restructured images */
+    .details-image {
+        max-width: 100%; height: auto;
+        border: 1px solid var(--accent-border);
+        margin-bottom: 0.55rem; display: block; cursor: zoom-in;
+        transition: box-shadow 0.35s ease, border-color 0.25s ease;
+    }
+    .details-image-caption {
+        font-family: var(--font-mono); font-size: 0.68rem;
+        color: var(--text-muted); margin-bottom: 1rem;
+    }
+    .figure-note {
+        font-family: var(--font-mono); font-size: 0.68rem;
+        color: var(--text-muted); padding: 0.5rem 0.75rem;
+        border: 1px dashed var(--accent-border);
+        margin-bottom: 1rem; display: inline-block;
+    }
+
+    @media (max-width: 768px) {
+        .slide-two-col { grid-template-columns: 1fr; gap: 1.25rem; }
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       LIGHTBOX
+    ═══════════════════════════════════════════════════════════════ */
+    #lightbox {
+        position: fixed; inset: 0;
+        background: rgba(255,255,255,0.96);
+        backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+        z-index: 9999;
+        display: flex; align-items: center; justify-content: center;
+        opacity: 0; pointer-events: none;
+        transition: opacity 0.3s ease;
+    }
+    #lightbox.open { opacity: 1; pointer-events: all; }
+    .lightbox-inner { text-align: center; max-width: min(90vw, 900px); padding: 2rem; }
+    #lightbox-img {
+        max-width: 100%; max-height: 78vh;
+        object-fit: contain;
+        border: 1px solid var(--accent-border);
+        transform: scale(0.94);
+        transition: transform 0.4s var(--spring);
+        display: block; margin: 0 auto;
+    }
+    #lightbox.open #lightbox-img { transform: scale(1); }
+    #lightbox-caption {
+        font-family: var(--font-mono); font-size: 0.7rem;
+        color: var(--text-muted); margin-top: 0.75rem;
+    }
+    .lightbox-close {
+        position: absolute; top: 1.5rem; right: 1.5rem;
+        font-family: var(--font-mono); font-size: 1.1rem;
+        background: none; border: 1px solid var(--accent-border);
+        color: var(--text-muted);
+        width: 38px; height: 38px; cursor: pointer;
+        display: flex; align-items: center; justify-content: center;
+        transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    }
+    .lightbox-close:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+    /* ═══════════════════════════════════════════════════════════════
+       CONTACT
+    ═══════════════════════════════════════════════════════════════ */
+    .contact-content { text-align: center; max-width: 580px; margin: 0 auto; }
+    .contact-content p {
+        font-size: 1rem; color: var(--text-secondary);
+        margin-bottom: 2rem; line-height: 1.7;
+    }
+    .contact-email {
+        font-family: var(--font-mono); font-size: 1.2rem;
+        color: var(--accent); text-decoration: none;
+        display: inline-block; padding: 1rem 2rem;
+        border: 1px solid var(--accent);
+        transition: background 0.3s var(--spring), color 0.3s ease,
+                    transform 0.3s var(--spring), box-shadow 0.3s ease;
+    }
+    .contact-email:hover {
+        background: var(--accent); color: #fff;
+        transform: scale(1.02);
+        box-shadow: 0 8px 24px rgba(85,107,47,0.2);
+    }
+    .contact-links { display: flex; justify-content: center; gap: 2rem; margin-top: 2rem; }
+    .contact-links a {
+        font-family: var(--font-mono); font-size: 0.78rem;
+        color: var(--text-muted); text-decoration: none;
+        letter-spacing: 1px; text-transform: uppercase;
+        position: relative; padding-bottom: 2px;
+        transition: color 0.2s ease;
+    }
+    .contact-links a::after {
+        content: ''; position: absolute; bottom: -1px; left: 0;
+        width: 0; height: 1px; background: var(--accent);
+        transition: width 0.25s ease;
+    }
+    .contact-links a:hover::after { width: 100%; }
+    .contact-links a:hover { color: var(--accent); }
+
+    /* ═══════════════════════════════════════════════════════════════
+       FOOTER
+    ═══════════════════════════════════════════════════════════════ */
+    footer {
+        padding: 1.5rem 3rem;
+        border-top: 1px solid var(--accent-border);
+        display: flex; justify-content: space-between; align-items: center;
+    }
+    footer p {
+        font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       SCROLL ANIMATION BASE STATE (non-hero elements)
+    ═══════════════════════════════════════════════════════════════ */
+    .anim-fade { opacity: 0; transform: translateY(22px); }
+
+    /* ═══════════════════════════════════════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════════════════════════════════════ */
+    @media (max-width: 960px) {
+        .bento-about      { grid-column: span 12; }
+        .bento-stats      { grid-column: span 12; flex-direction: row; gap: 2rem; }
+        .bento-skill-sm   { grid-column: span 6; }
+        .bento-skill-wide { grid-column: span 12; }
+        .cfd-pipeline     { gap: 0; }
+        .pipe-step        { min-width: 88px; padding: 0.6rem 0.7rem; }
+        .projects-grid    { grid-template-columns: 1fr; gap: 1rem; }
+        .project-card:nth-child(3n+1) { grid-column: 1; }
+        #project-modal    { width: 94vw; }
+    }
+    @media (max-width: 768px) {
+        nav { padding: 1rem 1.5rem; }
+        .nav-links { display: none; }
+        .hero, section { padding: 4rem 1.5rem; }
+        .hero-actions { flex-direction: column; align-items: flex-start; }
+        .hero-action-btn { width: 100%; justify-content: space-between; }
+        .projects-grid .project-card:nth-child(1) { order: 1; }
+        .projects-grid .project-card:nth-child(2) { order: 2; }
+        .projects-grid .project-card:nth-child(3) { order: 4; }
+        .projects-grid .project-card:nth-child(4) { order: 3; }
+        .projects-grid .project-card:nth-child(5) { order: 5; }
+        .projects-grid .project-card:nth-child(6) { order: 6; }
+        .eng-divider { padding: 0 1.5rem; }
+        .about-bento { display: flex; flex-direction: column; }
+        .bento-cell { border-bottom: 1px solid var(--accent-border); }
+        .bento-photo { min-height: 220px; }
+        .bento-stats { flex-direction: column; }
+        .bento-stats .bio-stat-wrap { border-right: none; border-bottom: 1px solid var(--accent-border); }
+        .project-preview { height: 160px; }
+        .hero-avatar { width: 80px; height: 80px; }
+        .hero-name-row { gap: 1rem; }
+        #project-modal { width: 96vw; top: 3vh; max-height: 92vh; }
+        .modal-inner { padding: 1.25rem 1.25rem 3rem; }
+        .slide-two-col { grid-template-columns: 1fr; }
+        footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+        .cfd-pipeline-wrap { padding: 1rem; }
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       REDUCED MOTION
+    ═══════════════════════════════════════════════════════════════ */
+    @media (prefers-reduced-motion: reduce) {
+        .tag, .project-tech span, .details-image,
+        .project-card, .contact-email { transition: none !important; }
+        #hero-canvas { display: none; }
+    }
+    </style>
+</head>
+<body>
+
+    <!-- Scroll Progress -->
+    <div id="scroll-progress"></div>
+
+    <!-- ── Navigation ───────────────────────────────────────────────── -->
+    <nav id="main-nav">
+        <div class="logo">YK<span class="cursor">_</span></div>
+        <ul class="nav-links">
+            <li><a href="#about">About</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- ── Hero ─────────────────────────────────────────────────────── -->
+    <header class="hero">
+        <canvas id="hero-canvas"></canvas>
+
+        <span class="hero-label">B.S. Mechanical Engineering</span>
+
+        <div class="hero-name-row">
+            <img src="Figures/headshot.jpeg" class="hero-avatar" alt="Yoseph Keisi">
+            <div class="h1-wrap">
+                <h1>Yoseph <span class="accent-word">Keisi<span class="name-sweep"></span></span></h1>
+            </div>
+        </div>
+
+        <p class="hero-subtitle">Mechanical engineer and researcher specializing in computational modeling, system validation, and embedded electromechanical design.</p>
+
+        <div class="hero-actions">
+            <a href="#about" class="hero-action-btn">Background</a>
+            <a href="#projects" class="hero-action-btn">Projects</a>
+            <a href="#contact" class="hero-action-btn">Contact</a>
+        </div>
+
+    </header>
+
+    <!-- ── Engineering Divider ──────────────────────────────────────── -->
+    <div class="eng-divider">
+        <div class="eng-divider-line"></div>
+        <span class="eng-divider-label">// section 01</span>
+        <div class="eng-divider-line"></div>
+    </div>
+
+    <!-- ── About ────────────────────────────────────────────────────── -->
+    <section id="about">
+        <div class="section-header anim-fade">
+            <span class="section-number">// 01</span>
+            <h2 class="section-title">About</h2>
+            <div class="section-line"></div>
+        </div>
+        <div class="about-bento anim-fade">
+
+            <div class="bento-cell bento-about">
+                <div class="about-text">
+                    <p><strong>Background</strong><br>I am a Mechanical Engineer (B.S., University of South Florida, 2025) specializing in the intersection of computational simulation and high-stakes hardware systems. My work focuses on bridging the gap between theoretical optimization and physical deployment, with applications spanning aerospace, biomedical, and energy systems.</p>
+                    <p><strong>Research &amp; Optimization</strong><br>As a Research Assistant at the Thermofluids Discovery Laboratory, I developed a CFD and genetic algorithm pipeline for the NASA CLEAN Initiative. My research specifically investigated 2D aerodynamic shape optimization as a cost-effective, high-fidelity baseline for wing development. Validated against NASA wind tunnel benchmarks, this work is currently being prepared for a first-author submission to an AIAA journal.</p>
+                    <p><strong>Systems Leadership</strong><br>I lead the development of complex electromechanical architectures, from serving as the Programming and Controls Lead for a NASA-affiliated lunar regolith compactor to designing autonomous navigation logic for robotics. I am deeply engaged by the potential of Scientific Machine Learning to refine physical processes and improve system reliability across diverse industries.</p>
+                    <p><strong>Perspective</strong><br>Beyond the lab, I am an active developer of agentic software workflows and a dedicated multi-instrumentalist and vinyl collector. I bring a systems-oriented, multidisciplinary mindset to every R&amp;D challenge.</p>
+                </div>
+            </div>
+
+
+            <div class="bento-cell bento-skill-sm">
+                <div class="skill-category">
+                    <h4>Simulation &amp; Analysis</h4>
+                    <p class="skill-list">ANSYS Fluent &middot; MATLAB &middot; Simulink &middot; LabVIEW &middot; ParaView</p>
+                </div>
+            </div>
+            <div class="bento-cell bento-skill-sm">
+                <div class="skill-category">
+                    <h4>CAD &amp; Design</h4>
+                    <p class="skill-list">SolidWorks <span class="cert-badge">CSWA</span> <span class="cert-badge">Additive Mfg</span> &middot; GD&amp;T &middot; DFM/DFA</p>
+                </div>
+            </div>
+            <div class="bento-cell bento-skill-sm">
+                <div class="skill-category">
+                    <h4>Programming</h4>
+                    <p class="skill-list">Python &middot; C &middot; Embedded C &middot; Dart/Flutter &middot; Git/GitHub</p>
+                </div>
+            </div>
+
+            <div class="bento-cell bento-about">
+                <div class="skill-category">
+                    <h4>AI &amp; Optimization</h4>
+                    <p class="skill-list">Genetic algorithms &middot; Automated CFD pipelines &middot; PyGAD &middot; Design-space exploration &middot; Agentic programming &middot; LLM-accelerated development</p>
+                </div>
+            </div>
+
+
+            <div class="bento-cell bento-skill-wide">
+                <div class="skill-category">
+                    <h4>Embedded Systems</h4>
+                    <p class="skill-list">Microcontroller programming (MSP430, ARM-class) &middot; Real-time control loops &middot; Actuator sequencing &middot; Multi-sensor integration &middot; Motor drive circuits</p>
+                </div>
+            </div>
+            <div class="bento-cell bento-skill-sm">
+                <div class="skill-category">
+                    <h4>Languages</h4>
+                    <p class="skill-list">English (Native) &middot; Arabic (Fluent) &middot; Spanish (Proficient)</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ── Engineering Divider ──────────────────────────────────────── -->
+    <div class="eng-divider">
+        <div class="eng-divider-line"></div>
+        <span class="eng-divider-label">// section 02</span>
+        <div class="eng-divider-line"></div>
+    </div>
+
+    <!-- ── Projects ─────────────────────────────────────────────────── -->
+    <section id="projects">
+        <div class="section-header anim-fade">
+            <span class="section-number">// 02</span>
+            <h2 class="section-title">Projects</h2>
+            <div class="section-line"></div>
+        </div>
+        <div class="projects-grid">
+
+            <!-- ─── 01 · CFD & Genetic Optimization ──────────────────── -->
+            <article class="project-card anim-fade">
+                <div class="crosshair-tracker"></div>
+                <div class="card-media">
+                    <video class="card-video" autoplay loop muted playsinline preload="metadata">
+                        <source src="Figures/naca2412-video.mp4" type="video/mp4">
+                    </video>
+                    <div class="card-overlay">
+                        <div class="card-overlay-header">
+                            <span class="project-number">// 01</span>
+                            <span class="project-year">2025</span>
+                        </div>
+                        <h3 class="project-title">CFD Validation &amp; Genetic Optimization of a 2D NACA 2412 Airfoil</h3>
+                        <p class="project-subtitle">First-Author Research Publication</p>
+                    </div>
+                </div>
+                <div class="project-content">
+                    <div class="project-highlights">
+                        <p>During my time as a Research Assistant in the USF Thermofluids Discovery Laboratory, I contributed to the NASA CLEAN Initiative, a program targeting zero-emission aircraft design. My focus was a specific open question: can 2D airfoil shape optimization serve as a computationally practical method for early-stage wing development?</p>
+                        <p>I built and validated a high-fidelity CFD pipeline in ANSYS Fluent around the NACA 2412, a well-documented airfoil that gave me strong experimental reference data for rigorous model calibration. That validation work &mdash; mesh independence studies, turbulence model selection, and parameter tuning against NASA wind tunnel benchmarks &mdash; became the methodological backbone of everything that followed. Once I trusted the simulation, I coupled it to a Python genetic algorithm built on PyGAD to search for geometries with improved lift-to-drag ratio.</p>
+                        <p>What came out of that optimization turned into its own investigation. The results were interesting enough, and the validation framework thorough enough, that this work is currently being prepared for first-author submission to an AIAA journal.</p>
+                        <button class="hero-action-btn" style="margin-top:1rem;cursor:pointer;border:1px solid rgba(0,0,0,0.1);" onclick="interactiveAirfoilBtn(event)">Interactive Airfoil</button>
+                    </div>
+                    <div class="project-tech">
+                        <span>ANSYS Fluent</span>
+                        <span>Python</span>
+                        <span>Genetic Algorithms</span>
+                        <span>SST Transitional Model</span>
+                        <span>ParaView</span>
+                    </div>
+                    <button class="project-details-toggle" onclick="toggleDetails(this)">
+                        <span>View Technical Details</span> <span class="arrow">&#9660;</span>
+                    </button>
+                    <div class="project-details">
+
+                        <div class="details-section">
+                            <h4>CFD Validation</h4>
+                            <p>Before running a single optimization, I needed to trust the simulation. That meant building the CFD model from scratch in ANSYS Fluent and validating it against NASA Langley wind tunnel data for the NACA 2412 before coupling it to anything else.</p>
+                            <p>The initial setup used the standard k-omega model, which consistently overpredicted drag. Switching to the SST-Transition model was the right call physically, since it resolves laminar-to-turbulent transition rather than assuming fully turbulent flow from the leading edge. But adopting it wasn&rsquo;t enough on its own. I ran sensitivity studies on the transition onset coefficient and the intermittency production rate, tuned surface roughness to represent polished wind tunnel conditions, and matched freestream turbulence intensity to the Langley test environment. Each of those choices had a measurable effect on drag prediction, and I traced the dominant error source to delayed transition onset.</p>
+                            <p>The final validated configuration achieved C<sub>L</sub>/C<sub>D</sub> error below 7% at the target Reynolds number of 3.1&times;10<sup>6</sup>. I also ran a mesh independence study across four structured meshes from roughly 400,000 to 1.8 million cells, all wall-resolved with y<sup>+</sup> below 2. Predictions varied by less than 0.4% across that range. A second mesh independence study was later conducted on the optimized geometry specifically, to confirm that the performance gains weren&rsquo;t resolution-dependent artifacts.</p>
+                            <p>Only after all of that did the optimization run on a model I was willing to defend.</p>
+                            <img src="Figures/law_of_wall_3stations.png" alt="Law of wall validation at three chordwise stations" class="details-image">
+                            <p class="details-image-caption">Law of the wall profiles at three chordwise stations, confirming wall-resolved boundary layer resolution (y<sup>+</sup> &lt; 2)</p>
+                            <img src="Figures/final-mesh.png" alt="Final computational mesh for NACA 2412 airfoil" class="details-image">
+                            <p class="details-image-caption">Final C-grid topology with wall-resolved inflation layers (y<sup>+</sup> &lt; 2)</p>
+                        </div>
+
+                        <div class="details-section">
+                            <h4>Genetic Algorithm Optimization</h4>
+                            <p>A genetic algorithm searches a design space the way evolution searches a gene pool: through selection, crossover, and mutation across successive generations of candidate solutions. Each candidate geometry was meshed and evaluated using the validated CFD pipeline, with lift-to-drag ratio as the sole objective. No surrogates, no smoothness constraints on the geometry.</p>
+                            <p>After 83 generations, the optimized airfoil reached a lift-to-drag ratio of 39.53 against a baseline of 37.31, a 5.94% improvement, driven primarily by a 4.8% increase in lift with a modest drag reduction.</p>
+                            <p>The more interesting result was geometric. Across the optimized geometry, the algorithm had left the leading edge and forward chord essentially untouched and concentrated all its modifications near the trailing edge, introducing small-amplitude oscillations on both surfaces aft of x/c = 0.6. This wasn&rsquo;t a one-off outcome. It showed up consistently regardless of random seed and mutation rate, which immediately raised the question of whether it was a physical mechanism or a numerical artifact.</p>
+                            <p>That question drove everything that followed.</p>
+                            <img src="Figures/best_fitness_per_generation_70gens.png" alt="Fitness improvement across generations" class="details-image">
+                            <p class="details-image-caption">Best lift-to-drag ratio per generation, showing convergence over 83 generations</p>
+                            <img src="Figures/optimized_geometry_comparison.png" alt="Optimized vs baseline NACA 2412 geometry" class="details-image">
+                            <p class="details-image-caption">Baseline vs. optimized airfoil, with trailing-edge oscillations concentrated aft of x/c = 0.6</p>
+                        </div>
+
+                        <div class="details-section">
+                            <h4>Physical Interpretation</h4>
+                            <p>The first question after seeing the oscillations was whether the pressure field could explain the lift gain. The static pressure difference contours, optimized minus baseline, gave a clear answer. The trailing edge modifications were generating alternating pockets of localized pressure change along both surfaces, with a net pressure increase on the lower surface and a net decrease on the upper. That&rsquo;s the lift mechanism. Integrating the chordwise pressure difference confirmed it numerically: +13.71 Pa net contribution from the lower surface, &minus;4.64 Pa from the upper, over the region where the oscillations live.</p>
+                            <p>The turbulent kinetic energy contours added another layer. The optimized geometry showed a systematic reduction in near-wall TKE along the lower surface boundary layer in the aft region, with the effect most pronounced approaching the trailing edge. The oscillations appear to be delaying or weakening separation onset, producing smoother, more attached flow. The upper surface saw a smaller but consistent reduction as well.</p>
+                            <p>Together these two pictures tell a coherent story. The trailing edge geometry is acting somewhat like surface dimples on a golf ball, generating small vortical structures that redistribute circulation, modify pressure recovery, and suppress turbulent mixing in the boundary layer. The lift gain is real, and the physics behind it is traceable.</p>
+                            <img src="Figures/Figure_Pressure_Comparison.png" alt="Pressure contour comparison" class="details-image">
+                            <p class="details-image-caption">Static pressure [Pa]: Baseline (top) &middot; Optimized (middle) &middot; Difference (bottom)</p>
+                            <img src="Figures/Figure_TKE_Comparison.png" alt="TKE contour comparison" class="details-image">
+                            <p class="details-image-caption">Turbulent Kinetic Energy [m<sup>2</sup>/s<sup>2</sup>]: Baseline (top) &middot; Optimized (middle) &middot; Difference (bottom)</p>
+                        </div>
+
+                        <div class="details-section">
+                            <h4>Robustness and Sensitivity Studies</h4>
+                            <p>Finding an interesting result is one thing. Confirming it holds up under scrutiny is another. I ran three categories of follow-up studies specifically to stress-test the optimization outcome.</p>
+                            <p>The first was robustness testing across random seeds and mutation rates. Three independent runs with different initializations all converged to geometries showing the same trailing edge oscillatory behavior, with comparable fitness values despite taking different paths there. Testing mutation rates from 5% to 30% told the same story: the specific convergence trajectories differed but the characteristic aft-region geometry kept emerging. The feature was reproducible, not lucky.</p>
+                            <p>The second was a mesh independence study on the optimized geometry itself, separate from the one run on the baseline during validation. Performance improvement varied by only 0.6% across mesh resolutions, with finer meshes capturing slightly more of the gain, consistent with better resolving the small trailing edge features.</p>
+                            <p>The third was a turbulence model sensitivity check. Re-evaluating both the baseline and optimized geometries under standard k-&omega; and Spalart&ndash;Allmaras models showed reduced absolute improvement percentages, expected since neither captures laminar-to-turbulent transition. But both still predicted improvement. The gain persisted across fundamentally different closure assumptions.</p>
+                            <p>Taken together, these studies made the case that the result was not an artifact of initialization, mesh resolution, or model formulation.</p>
+                            <img src="Figures/robustness_overlay.png" alt="Robustness overlay across seeds and mutation rates" class="details-image">
+                            <p class="details-image-caption">Fitness overlay across independent runs, showing convergence to consistent trailing-edge geometry regardless of initialization</p>
+                        </div>
+
+                        <div class="details-section">
+                            <h4>Geometric Characterization and Parametric Sweep</h4>
+                            <p>Once the trailing edge oscillations were confirmed as a real aerodynamic feature, the next step was to describe them mathematically. I fit a rectified chirped sinusoidal perturbation function to the GA-optimal lower surface geometry. The equation captures the key physical behavior: one-sided bumps that only displace the surface outward, an amplitude that tapers toward the trailing edge, and a smooth return to zero at the trailing edge regardless of other parameter values. Five free parameters control the shape: amplitude, wavelength, perturbation start position, taper rate, and frequency exponent. The interactive figure at the top of this project lets you manipulate each one directly and watch how the geometry responds, giving an immediate intuition for what each parameter is actually doing to the surface.</p>
+                            <p>With the equation established, I ran a one-at-a-time parametric sweep across all five parameters on the NACA 2412, running roughly 42 CFD evaluations, each solved in ANSYS Fluent at the same operating condition used throughout. The goal was to map how sensitive lift-to-drag ratio was to each parameter independently and locate the single-variable optima. The results reveal which parameters aerodynamic performance responds to most strongly and where the peak improvement sits within each range.</p>
+                            <p><code>&delta;y = max(0, a &middot; (1 &minus; &tau;&xi;) &middot; (1 &minus; &xi;&sup2;) &middot; sin(2&pi;(x<sub>te</sub> &minus; x<sub>0</sub>) / &lambda; &middot; &xi;<sup>k</sup>))</code></p>
+                            <p>where &xi; = (x &minus; x<sub>0</sub>) / (x<sub>te</sub> &minus; x<sub>0</sub>) is the normalized chordwise coordinate over the perturbation domain, where <em>a</em>: peak outward displacement &middot; <em>&lambda;</em>: spatial period &middot; <em>x<sub>0</sub></em>: perturbation start &middot; <em>&tau;</em>: amplitude taper toward trailing edge &middot; <em>k</em>: frequency chirp exponent.</p>
+                            <img src="Figures/5-parameter-equation-characterization.png" alt="One-at-a-time parametric sweep across five perturbation parameters" class="details-image">
+                            <p class="details-image-caption">One-at-a-time parametric sweep showing lift-to-drag sensitivity and single-variable optima across all five perturbation parameters</p>
+                            <iframe src="naca2412_particles.html" style="width:100%;height:480px;border:1px solid var(--accent-border);display:block;margin-top:1rem;" title="Interactive airfoil parametric explorer" loading="lazy"></iframe>
+                        </div>
+
+                    </div>
+                </div>
+            </article>
+
+            <!-- ─── 02 · Lunar Regolith Compactor ────────────────────── -->
+            <article class="project-card anim-fade">
+                <div class="crosshair-tracker"></div>
+                <div class="card-media">
+                    <video class="card-video" autoplay loop muted playsinline preload="metadata">
+                        <source src="Figures/NASA_Rendering_Video_Request.mp4" type="video/mp4">
+                    </video>
+                    <div class="card-overlay">
+                        <div class="card-overlay-header">
+                            <span class="project-number">// 02</span>
+                            <span class="project-year">2025</span>
+                        </div>
+                        <h3 class="project-title">Lunar Regolith Compactor</h3>
+                        <p class="project-subtitle">NASA R&amp;D Capstone | RE-RASSOR Rover Attachment</p>
+                    </div>
+                </div>
+                <div class="project-content">
+                    <div class="project-highlights">
+                        <p>NASA's RE-RASSOR rover was designed to excavate lunar regolith, but had no mechanism to compact it for structural use. Direct pressure fractures lunar regolith particles into finer grains, reducing density rather than increasing it. We chose vibration-based densification as the compaction method and designed the full system around it.</p>
+                        <p>Commissioned by the Florida Space Institute at UCF, I served as Programming and Controls Lead, co-designing the electromechanical architecture and writing the full automated compaction sequence. I modeled the system as a 2-DOF mass-spring-damper in MATLAB to compute resonant frequencies under lunar gravity, which are meaningfully lower than their Earth equivalents. That analysis directly drove motor selection, PWM tuning, and deployment timing.</p>
+                    </div>
+                    <div class="project-tech">
+                        <span>Arduino</span><span>MATLAB</span><span>SolidWorks</span>
+                        <span>Vibration Analysis</span><span>Circuit Design</span>
+                    </div>
+                    <button class="project-details-toggle" onclick="toggleDetails(this)">
+                        <span>View Technical Details</span> <span class="arrow">&#9660;</span>
+                    </button>
+                    <div class="project-details">
+                        <div class="details-section">
+                            <h4>System Design</h4>
+                            <p>The compactor attaches to the RE-RASSOR as a modular end effector, designed to fit within the rover's existing size and power envelope without requiring modifications to the base platform. The mechanical core is a two-plate assembly: a flat compression plate that makes initial contact with the regolith surface, and a pinned plate directly above it whose pins extend through the compression plate and into the regolith during actuation. Dual linear actuators drive the deployment sequence, lowering the compression plate first, then advancing the pinned plate to engage the subsurface layer. Vibration motors mounted to the pinned plate drive densification at the computed resonant frequency, then the full assembly retracts in reverse order.</p>
+                            <p>We designed the electrical and mechanical architecture together, keeping motor selection, driver sizing, and actuation timing tightly coupled so that the system could meet the rover's size and power constraints as a unit rather than as separate subsystems. The final prototype successfully compacted regolith simulant under test conditions, validating both the mechanical design and the control sequence.</p>
+                            <img src="Figures/compactor-cad.png" alt="Compactor CAD model" class="details-image">
+                            <p class="details-image-caption">SolidWorks assembly: dual-plate vibratory pin compactor with linear actuators and eccentric mass motors</p>
+                            <img src="Figures/compactor-prototype.jpg" alt="Physical prototype" class="details-image">
+                            <p class="details-image-caption">Working prototype with 12V power system, linear actuators, and dual ERM vibration motors</p>
+                        </div>
+                        <div class="details-section">
+                            <h4>Vibration Dynamics Analysis</h4>
+                            <p>To determine optimal excitation frequency, I modeled the system as a 2-DOF mass-spring-damper in MATLAB and computed the frequency response for both Earth and lunar gravity conditions. The analysis revealed that resonance occurs at significantly lower frequencies on the Moon (~87 Hz) compared to Earth (~133 Hz) due to reduced gravitational stiffness effects on the regolith bed. This informed motor selection and PWM tuning strategy.</p>
+                            <img src="Figures/compactor-frequency.jpg" alt="Frequency response analysis" class="details-image">
+                            <p class="details-image-caption">2-DOF frequency response: Moon (blue) shows lower resonant frequency and higher displacement amplitude than Earth (red)</p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- ─── 03 · GeoCompanion ─────────────────────────────────── -->
+            <article class="project-card anim-fade">
+                <div class="crosshair-tracker"></div>
+                <div class="card-media">
+                    <video class="card-video" autoplay loop muted playsinline preload="metadata">
+                        <source src="Figures/geocompanion-demo.mp4" type="video/mp4">
+                    </video>
+                    <div class="card-overlay">
+                        <div class="card-overlay-header">
+                            <span class="project-number">// 03</span>
+                            <span class="project-year">2025</span>
+                        </div>
+                        <h3 class="project-title">GeoCompanion</h3>
+                        <p class="project-subtitle">Cross-Platform Mobile App | Flutter + Supabase</p>
+                    </div>
+                </div>
+                <div class="project-content">
+                    <div class="project-highlights">
+                        <p>I built GeoCompanion out of a habit I already had: opening Google Maps and just wandering, zooming into random corners of the world, reading about the geography, the history, the culture of places I had never thought about. I wanted that experience to be a daily ritual instead of something that happened by accident.</p>
+                        <p>The app delivers one location per day, globally synchronized across all users. You get a curated fact, geographic context, and cultural framing for that place. Over time, your personal globe fills in with every location you have explored, building a visual record of where your curiosity has taken you. The idea is simple: one place a day, and actually stay with it.</p>
+                        <p>I designed and built the full stack solo, using agentic coding workflows throughout to move across the Flutter frontend, Supabase backend, and Mapbox integration without losing architectural coherence.</p>
+                    </div>
+                    <div class="project-tech">
+                        <span>Flutter</span><span>Dart</span><span>Supabase</span>
+                        <span>Mapbox</span><span>Xcode</span><span>iOS Widgets</span>
+                    </div>
+                    <button class="project-details-toggle" onclick="toggleDetails(this)">
+                        <span>View Technical Details</span> <span class="arrow">&#9660;</span>
+                    </button>
+                    <div class="project-details">
+                        <div class="details-section">
+                            <video class="project-video" controls>
+                                <source src="Figures/geocompanion-demo.mp4" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                            <p class="project-video-caption">App demo: daily location reveal, cinematic map transitions, and journal system</p>
+                        </div>
+                        <div class="details-section">
+                            <h4>Backend and State Architecture</h4>
+                            <p>The backend runs on Supabase, seeding one location per day and caching it locally to guarantee consistency across sessions and users. A structured journal system logs visited locations with relative day labeling, maintaining a clean separation between persistent daily data and ephemeral exploration state.</p>
+                            <p>On the frontend, I built a constraint-driven layout system where spacing rules are independent of content height, which eliminates UI jitter during transitions. Collapsible information cards expand without shifting surrounding controls, and explicit animation boundaries with centralized state management prevent unintended navigation during complex view changes.</p>
+                        </div>
+                        <div class="details-section">
+                            <h4>Map System</h4>
+                            <p>The map experience is built on Mapbox with cinematic, time-based camera transitions: zoom out, pan across the globe, zoom into the destination. The sequence is deliberate. It communicates geographic scale and distance rather than jumping to a pin.</p>
+                            <p>From there, the user can drop into Google Street View for that location, placing them on the ground in a place they may never have heard of an hour ago. That integration runs through a WebView overlay with a multi-state draggable panel and carefully managed gesture controllers to keep the transition seamless. Wiring the Mapbox and Street View APIs together, and managing the state between them cleanly, was one of the more technically involved parts of the build.</p>
+                            <p>The personal globe accumulates every location a user has explored, marked and dated. There is no feed, no streak system, no algorithmic nudge. The map just fills in, slowly, over time.</p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- ─── 04 · Mechanical Record Player ────────────────────── -->
+            <article class="project-card anim-fade">
+                <div class="crosshair-tracker"></div>
+                <div class="card-media">
+                    <video class="card-video" autoplay loop muted playsinline preload="metadata">
+                        <source src="Figures/Record_Player_Design_Video_Preview.mp4" type="video/mp4">
+                    </video>
+                    <div class="card-overlay">
+                        <div class="card-overlay-header">
+                            <span class="project-number">// 04</span>
+                            <span class="project-year">2023</span>
+                        </div>
+                        <h3 class="project-title">Mechanical Record Player Design</h3>
+                        <p class="project-subtitle">Concept-to-CAD Product Design</p>
+                    </div>
+                </div>
+                <div class="project-content">
+                    <div class="project-highlights">
+                        <p>Most student CAD projects treat manufacturability as optional, producing assemblies that render well but would fail on the shop floor. I set out to design a turntable where every internal component could actually be built: real materials, real tolerances, real assembly sequence.</p>
+                        <p>I began by reverse-engineering an Audio-Technica AT-LP60X to internalize tonearm kinematics, belt-drive geometry, and platter dynamics. From that foundation I designed a 23-part assembly from scratch in SolidWorks, specifying off-the-shelf hardware alongside custom parts and documenting everything: exploded views, a full BOM with material callouts, GD&amp;T annotations, and kinematic diagrams showing tonearm pivot geometry and counterweight balance.</p>
+                    </div>
+                    <div class="project-tech">
+                        <span>SolidWorks</span><span>Assembly Modeling</span>
+                        <span>GD&amp;T</span><span>Design for Manufacture</span><span>Technical Drawing</span>
+                    </div>
+                    <button class="project-details-toggle" onclick="toggleDetails(this)">
+                        <span>View Technical Details</span> <span class="arrow">&#9660;</span>
+                    </button>
+                    <div class="project-details">
+                        <div class="details-section">
+                            <h4>Design Philosophy</h4>
+                            <p>This project combined my passion for music and record collecting with mechanical engineering fundamentals. The goal was to create a visually striking, futuristic turntable that wasn&rsquo;t just a render; every internal component had to be mechanically sound and actually manufacturable. The aesthetic draws from mid-century modern and contemporary industrial design while maintaining full functionality.</p>
+                            <img src="Figures/recordplayer.jpg" alt="Record player SolidWorks render" class="details-image">
+                            <p class="details-image-caption">Final SolidWorks render: belt-drive turntable with integrated tonearm assembly</p>
+                        </div>
+                        <div class="details-section">
+                            <h4>Engineering Documentation</h4>
+                            <p>The complete assembly consists of 23 individual parts, each modeled with realistic material properties and manufacturing constraints. The BOM includes off-the-shelf components (6061 aluminum hardware, silicon-nitride ceramic bearings, steel ball bearings) alongside custom-designed parts, demonstrating understanding of hybrid sourcing strategies in product development.</p>
+                            <img src="Figures/recordplayer-bom.jpg" alt="Bill of materials and exploded view" class="details-image">
+                            <p class="details-image-caption">Exploded view with bill of materials: 23-part assembly with material callouts</p>
+                        </div>
+                        <div class="details-section">
+                            <h4>Kinematic Design</h4>
+                            <p>The tonearm mechanism required careful attention to pivot geometry and counterweight balance. The design allows for both vertical rotation (for needle drop and lift) and horizontal tracking across the record surface. Friction and counterweight were tuned to provide stable needle tracking without excessive downforce that could damage vinyl grooves.</p>
+                            <img src="Figures/recordplayer-views.jpg" alt="Tonearm kinematic views" class="details-image">
+                            <p class="details-image-caption">Alternate views showing tonearm vertical/horizontal rotation axes and turntable drive</p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- ─── 05 · Autonomous Maze Robot ───────────────────────── -->
+            <article class="project-card anim-fade">
+                <div class="crosshair-tracker"></div>
+                <div class="card-media">
+                    <video id="maze-card-video" class="card-video" autoplay muted playsinline preload="metadata">
+                        <source src="Figures/Autonomous_Maze_Solving_Robot_Rendering.mp4" type="video/mp4">
+                    </video>
+                    <div class="card-overlay">
+                        <div class="card-overlay-header">
+                            <span class="project-number">// 05</span>
+                            <span class="project-year">2024</span>
+                        </div>
+                        <h3 class="project-title">Autonomous Maze Navigation Vehicle</h3>
+                        <p class="project-subtitle">Embedded Systems &amp; Mechatronics</p>
+                    </div>
+                </div>
+                <div class="project-content">
+                    <div class="project-highlights">
+                        <p>Autonomous maze navigation is a systems integration problem, as failures in sensing, planning, or actuation all look the same at competition time: the robot stops. Getting it right requires the hardware and software to behave as a single coherent system, not two teams handing off at the last minute.</p>
+                        <p>I led electrical system design and embedded programming for the competition robot, building a sensor fusion architecture that combined ultrasonic wall-following with IR-based object detection and color classification. The state machine I wrote coordinated sensor polling, motor commands, and the gear-driven grabber actuator in real time. The robot successfully navigated the full competition maze and retrieved multiple targets.</p>
+                    </div>
+                    <div class="project-tech">
+                        <span>Arduino</span><span>Ultrasonic Sensors</span>
+                        <span>IR Sensors</span><span>Motor Control</span><span>SolidWorks</span>
+                    </div>
+                    <button class="project-details-toggle" onclick="toggleDetails(this)">
+                        <span>View Technical Details</span> <span class="arrow">&#9660;</span>
+                    </button>
+                    <div class="project-details">
+                        <div class="details-section">
+                            <h4>System Overview</h4>
+                            <p>The challenge: build an autonomous vehicle that navigates an unknown maze, identifies colored objects, picks them up, and releases, all without human input. I designed the electrical architecture and control software, integrating multiple sensor systems into a cohesive navigation and manipulation pipeline.</p>
+                            <img src="Figures/mazerobot.jpg" alt="Maze navigation robot" class="details-image">
+                            <p class="details-image-caption">Competition-ready robot with ultrasonic array, IR sensors, mecanum wheels, and custom grabber</p>
+                        </div>
+                        <div class="details-section">
+                            <h4>Sensor Integration &amp; Control Logic</h4>
+                            <p>Ultrasonic sensors provided distance measurements for wall-following and obstacle avoidance, feeding into a state machine that handled turns, dead ends, and path selection. IR sensors detected object presence and color, triggering the grab sequence when a target was identified. The control code synchronized sensor polling, motor commands, and actuator timing to achieve smooth autonomous operation.</p>
+                        </div>
+                        <div class="details-section">
+                            <h4>Grabber Mechanism</h4>
+                            <p>The robot featured a gear-driven grabber capable of grasping objects and lifting them for color detection. The mechanism was compact enough to fit within the robot's footprint while providing sufficient grip force and lift height to clear maze walls during transit.</p>
+                            <img src="Figures/grabber-drawing.jpg" alt="Grabber mechanism technical drawing" class="details-image">
+                            <p class="details-image-caption">Technical drawing of gear-driven grabber assembly</p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- ─── 06 · Cardiac Flow Signal Processing ──────────────── -->
+            <article class="project-card anim-fade">
+                <div class="crosshair-tracker"></div>
+                <div class="card-media">
+                    <video class="card-video" autoplay loop muted playsinline preload="metadata">
+                        <source src="Figures/Blood_Flow_Data_Visualization_Video_Render.mp4" type="video/mp4">
+                    </video>
+                    <div class="card-overlay">
+                        <div class="card-overlay-header">
+                            <span class="project-number">// 06</span>
+                            <span class="project-year">2022</span>
+                        </div>
+                        <h3 class="project-title">Cardiac Flow Signal Processing</h3>
+                        <p class="project-subtitle">Biomedical Data Analysis in MATLAB</p>
+                    </div>
+                </div>
+                <div class="project-content">
+                    <div class="project-highlights">
+                        <p>MRI-derived blood flow data is noisy, continuous, and structurally ambiguous, and individual heartbeats don't come pre-labeled. Manual segmentation is time-consuming and subjective, and any bias in cycle detection propagates directly into downstream cardiac metrics. The goal was to automate the full analysis pipeline without sacrificing physiological accuracy.</p>
+                        <p>Working with real anonymized patient data from left-ventricular flow measurements taken during exercise, I developed a MATLAB pipeline that applies adaptive signal smoothing, detects systolic peaks and diastolic troughs using gradient-based criteria, and segments the continuous recording into individual cardiac cycles. Trapezoidal numerical integration then estimates stroke volume per beat, with the full dataset analyzed statistically to characterize cardiac output under exercise load.</p>
+                    </div>
+                    <div class="project-tech">
+                        <span>MATLAB</span><span>Signal Processing</span>
+                        <span>Numerical Integration</span><span>Biomedical Data</span><span>Statistical Analysis</span>
+                    </div>
+                    <button class="project-details-toggle" onclick="toggleDetails(this)">
+                        <span>View Technical Details</span> <span class="arrow">&#9660;</span>
+                    </button>
+                    <div class="project-details">
+                        <div class="details-section">
+                            <h4>Clinical Context</h4>
+                            <p>This project analyzed real MRI-derived blood flow measurements from a patient's left ventricle during exercise. The goal was to segment individual heartbeats from continuous flow data and quantify cardiac output, information that helps researchers understand how diseased hearts respond to increased physiological demand. Working with authentic clinical data required careful handling of noise and biological variability.</p>
+                        </div>
+                        <div class="details-section">
+                            <h4>Signal Processing Pipeline</h4>
+                            <p>Raw flow measurements contained significant noise that obscured the underlying cardiac cycles. We implemented a smoothing filter to clean the signal while preserving the physiologically relevant waveform features. A custom peak detection algorithm identified systolic maxima based on threshold and local gradient criteria, then searched backward from each peak to locate the corresponding trough, marking the start of each cardiac cycle.</p>
+                            <img src="Figures/cardiac-smoothed.jpg" alt="Smoothed flow signal with detected troughs" class="details-image">
+                            <p class="details-image-caption">Smoothed flow signal with automatically detected cycle starting points (troughs)</p>
+                        </div>
+                        <div class="details-section">
+                            <h4>Cycle Segmentation &amp; Overlay</h4>
+                            <p>Using the detected troughs as boundaries, the algorithm segmented the continuous recording into individual cardiac cycles. Overlaying all cycles on a common time axis revealed the consistency of the patient's heart function. The tight clustering indicates stable stroke volume across beats despite exercise conditions.</p>
+                            <img src="Figures/cardiac-cycles.jpg" alt="Overlaid cardiac cycles" class="details-image">
+                            <p class="details-image-caption">All cardiac cycles aligned and overlaid, showing consistent waveform morphology across heartbeats</p>
+                        </div>
+                        <div class="details-section">
+                            <h4>Numerical Integration &amp; Statistics</h4>
+                            <p>For each cardiac cycle, we computed the area under the flow curve using trapezoidal integration. This area represents the volume of blood ejected per beat. Statistical analysis yielded a mean stroke volume of 97,708 &plusmn; 6,438 (arbitrary units), with the histogram showing approximately normal distribution indicating healthy, consistent cardiac function.</p>
+                            <img src="Figures/cardiac-histogram.jpg" alt="Histogram of stroke volumes" class="details-image">
+                            <p class="details-image-caption">Distribution of stroke volumes across all detected cardiac cycles</p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+    <!-- ── Engineering Divider ──────────────────────────────────────── -->
+    <div class="eng-divider">
+        <div class="eng-divider-line"></div>
+        <span class="eng-divider-label">// section 03</span>
+        <div class="eng-divider-line"></div>
+    </div>
+
+    <!-- ── Contact ───────────────────────────────────────────────────── -->
+    <section id="contact">
+        <div class="section-header anim-fade">
+            <span class="section-number">// 03</span>
+            <h2 class="section-title">Contact</h2>
+            <div class="section-line"></div>
+        </div>
+        <div class="contact-content anim-fade">
+            <p>Currently seeking full-time opportunities.<br>Open to relocation.</p>
+            <a href="/cdn-cgi/l/email-protection#562f3d333f253f163923223a39393d7835393b" class="contact-email"><span class="__cf_email__" data-cfemail="641d0f010d170d240b1110080b0b0f4a070b09">[email&#160;protected]</span></a>
+            <div class="contact-links">
+                <a href="https://www.linkedin.com/in/yoseph-keisi" target="_blank" rel="noopener">LinkedIn</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── Footer ────────────────────────────────────────────────────── -->
+    <footer>
+        <p>&copy; 2025 Yoseph Keisi</p>
+        <p>B.S. Mechanical Engineering, USF</p>
+    </footer>
+
+    <!-- ── Project Detail Modal ──────────────────────────────────────── -->
+    <div id="modal-overlay"></div>
+    <div id="project-modal">
+        <button class="modal-close-btn" id="modal-close" aria-label="Close">&#215;</button>
+        <div class="modal-inner">
+            <span class="modal-project-number" id="modal-number"></span>
+            <h2 class="modal-title" id="modal-title"></h2>
+            <p class="modal-subtitle" id="modal-subtitle"></p>
+            <div class="modal-img-wrap">
+                <img id="modal-preview-img" src="" alt="" style="display:none;">
+                <video id="modal-preview-vid" autoplay loop muted playsinline style="display:none;"></video>
+                <iframe id="modal-preview-sim" src="" style="display:none; width:100%; height:100%; border:none; position:absolute; inset:0;" title="Interactive simulation"></iframe>
+            </div>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <!-- ── Lightbox ──────────────────────────────────────────────────── -->
+    <div id="lightbox">
+        <button class="lightbox-close" onclick="closeLightbox()" aria-label="Close">&times;</button>
+        <div class="lightbox-inner">
+            <img id="lightbox-img" src="" alt="">
+            <p id="lightbox-caption"></p>
+        </div>
+    </div>
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+    <script>
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    window.scrollTo(0, 0);
+    </script>
+    <script>
+    'use strict';
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    /* ═══════════════════════════════════════════════════════════════
+       SCROLL PROGRESS BAR
+    ═══════════════════════════════════════════════════════════════ */
+    const progressBar = document.getElementById('scroll-progress');
+    window.addEventListener('scroll', () => {
+        const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+        progressBar.style.width = Math.min(pct, 100) + '%';
+    }, { passive: true });
+
+    /* ═══════════════════════════════════════════════════════════════
+       NAV SCROLL SHADOW
+    ═══════════════════════════════════════════════════════════════ */
+    const mainNav = document.getElementById('main-nav');
+    window.addEventListener('scroll', () => {
+        mainNav.classList.toggle('scrolled', window.scrollY > 40);
+    }, { passive: true });
+
+    /* ═══════════════════════════════════════════════════════════════
+       HERO CANVAS – CFD STREAMLINES
+    ═══════════════════════════════════════════════════════════════ */
+    (function initCanvas() {
+        if (prefersReducedMotion) return;
+        const canvas = document.getElementById('hero-canvas');
+        const ctx = canvas.getContext('2d');
+        let t = 0, lines = [];
+
+        function resize() {
+            canvas.width  = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            buildLines();
+        }
+        function buildLines() {
+            const n = Math.max(12, Math.ceil(canvas.height / 36));
+            lines = Array.from({ length: n }, (_, i) => ({
+                y: (i / (n - 1)) * canvas.height,
+                phase: Math.random() * Math.PI * 2,
+                amp:   6 + Math.random() * 10,
+                freq:  0.005 + Math.random() * 0.003,
+                speed: 0.006 + Math.random() * 0.004,
+            }));
+        }
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const cx = canvas.width * 0.38, cy = canvas.height * 0.50;
+            const R  = Math.min(canvas.width, canvas.height) * 0.12;
+            lines.forEach(ln => {
+                ctx.beginPath();
+                for (let x = 0; x <= canvas.width; x += 4) {
+                    const dx = x - cx, dy = ln.y - cy;
+                    const r  = Math.sqrt(dx*dx + dy*dy);
+                    const deflect = r < R * 2.5
+                        ? (dy / (r + 1)) * Math.pow(Math.max(0, 1 - r / (R * 2.5)), 1.6) * R * 0.7 : 0;
+                    const y = ln.y + Math.sin(x * ln.freq + t * ln.speed + ln.phase) * ln.amp + deflect;
+                    x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+                }
+                ctx.strokeStyle = 'rgba(85,107,47,0.05)';
+                ctx.lineWidth = 0.9;
+                ctx.stroke();
+            });
+            t++;
+            requestAnimationFrame(draw);
+        }
+        resize();
+        window.addEventListener('resize', resize, { passive: true });
+        draw();
+    })();
+
+    /* ═══════════════════════════════════════════════════════════════
+       GSAP SETUP
+    ═══════════════════════════════════════════════════════════════ */
+    gsap.registerPlugin(ScrollTrigger);
+
+    /* ═══════════════════════════════════════════════════════════════
+       HERO ENTRANCE TIMELINE
+    ═══════════════════════════════════════════════════════════════ */
+    (function heroTimeline() {
+        if (prefersReducedMotion) {
+            gsap.set(['.hero-label','.hero h1','.hero-subtitle','.hero-actions','.hero-tags .tag'],
+                { opacity: 1, y: 0 });
+            return;
+        }
+        gsap.timeline({ delay: 0.25 })
+            .fromTo('.hero-label',  { opacity:0, x:-18 }, { opacity:1, x:0, duration:0.55, ease:'power2.out' })
+            .fromTo('.hero h1',     { y:'110%' }, { y:'0%', duration:0.75, ease:'power3.out' }, '-=0.2')
+            .fromTo('.name-sweep',  { scaleX:0 }, { scaleX:1, duration:0.38, ease:'power2.inOut' }, '-=0.05')
+            .to('.name-sweep',      { opacity:0, duration:0.35, ease:'power1.out' })
+            .fromTo('.hero-subtitle',{ opacity:0, y:14 }, { opacity:1, y:0, duration:0.6, ease:'power2.out' }, '-=0.45')
+            .fromTo('.hero-actions', { opacity:0, y:10 }, { opacity:1, y:0, duration:0.4, ease:'power2.out' }, '-=0.3')
+            .fromTo('.hero-tags .tag',{ opacity:0, y:10, scale:0.92 },
+                { opacity:1, y:0, scale:1, duration:0.4, stagger:0.09, ease:'back.out(1.7)' }, '-=0.25');
+    })();
+
+    /* ═══════════════════════════════════════════════════════════════
+       SCROLL FADE-INS
+    ═══════════════════════════════════════════════════════════════ */
+    gsap.utils.toArray('.anim-fade').forEach(el => {
+        gsap.fromTo(el, { opacity:0, y:22 }, {
+            opacity:1, y:0, duration:0.65, ease:'power2.out',
+            scrollTrigger: { trigger: el, start:'top 88%', once:true }
+        });
+    });
+
+    /* ═══════════════════════════════════════════════════════════════
+       PROJECT CARDS — HOVER + MODAL SYSTEM
+    ═══════════════════════════════════════════════════════════════ */
+
+    // Inject bg-number, view-label, hover GSAP, click → modal
+    document.querySelectorAll('.project-card').forEach(card => {
+        // "View Project →" label
+        const content = card.querySelector('.project-content');
+        if (content) {
+            const lbl = document.createElement('span');
+            lbl.className = 'card-view-label';
+            lbl.innerHTML = 'View Project <span aria-hidden="true">&#8594;</span>';
+            content.appendChild(lbl);
+        }
+        // GSAP hover scale
+        if (!prefersReducedMotion) {
+            card.addEventListener('mouseenter', () =>
+                gsap.to(card, { scale: 1.02, duration: 0.35, ease: 'power2.out' }));
+            card.addEventListener('mouseleave', () =>
+                gsap.to(card, { scale: 1, duration: 0.35, ease: 'power2.out' }));
+        }
+        // Click → open modal
+        card.addEventListener('click', () => openProjectModal(card));
+    });
+
+    /* ── Modal state ─────────────────────────────────────────────── */
+    const modalOverlay = document.getElementById('modal-overlay');
+    const modalPanel   = document.getElementById('project-modal');
+    let   activeCard   = null;
+    let   movedDetails = null; // { el, parent } — details moved to modal
+
+    function openProjectModal(card) {
+        if (activeCard === card) return;
+
+        const isSwap = !!activeCard;
+
+        // Return previous card's details panel
+        if (movedDetails) {
+            movedDetails.el.classList.remove('open');
+            movedDetails.parent.appendChild(movedDetails.el);
+            movedDetails = null;
+        }
+        activeCard = card;
+
+        // ── Header ───────────────────────────────────────────────────
+        document.getElementById('modal-number').textContent =
+            card.querySelector('.project-number')?.textContent || '';
+        document.getElementById('modal-title').textContent =
+            card.querySelector('.project-title')?.textContent || '';
+        document.getElementById('modal-subtitle').textContent =
+            card.querySelector('.project-subtitle')?.textContent || '';
+
+        const prevImg  = card.querySelector('.project-preview');
+        const prevVid  = card.querySelector('.card-video');
+        const simSrc   = card.dataset.sim || '';
+        const modalImg = document.getElementById('modal-preview-img');
+        const modalVid = document.getElementById('modal-preview-vid');
+        const modalSim = document.getElementById('modal-preview-sim');
+        // Reset all three
+        modalImg.style.display = 'none';
+        modalVid.style.display = 'none';
+        modalSim.style.display = 'none'; modalSim.src = '';
+        if (simSrc) {
+            modalSim.src = simSrc;
+            modalSim.style.display = 'block';
+            modalImg.closest('.modal-img-wrap').classList.add('has-sim');
+        } else if (prevVid) {
+            const srcEl = prevVid.querySelector('source');
+            if (srcEl) {
+                const isMaze = prevVid.id === 'maze-card-video';
+                modalVid.innerHTML = `<source src="${srcEl.src}" type="video/mp4">`;
+                modalVid.style.display = 'block';
+                modalVid.loop = !isMaze;
+                if (isMaze) {
+                    modalVid._mazeEndHandler = () => { modalVid.currentTime = 2; modalVid.play().catch(() => {}); };
+                    modalVid.addEventListener('loadedmetadata', function onMazeMeta() {
+                        modalVid.currentTime = 2;
+                        modalVid.removeEventListener('loadedmetadata', onMazeMeta);
+                    });
+                    modalVid.addEventListener('ended', modalVid._mazeEndHandler);
+                }
+                modalVid.load();
+                modalVid.play().catch(() => {});
+            }
+        } else if (prevImg?.src) {
+            modalImg.src = prevImg.src; modalImg.alt = prevImg.alt || '';
+            modalImg.style.display = 'block';
+        }
+
+        // ── Body ─────────────────────────────────────────────────────
+        const modalBody = document.getElementById('modal-body');
+        modalBody.innerHTML = '';
+
+        const highlights = card.querySelector('.project-highlights');
+        const tech       = card.querySelector('.project-tech');
+        const details    = card.querySelector('.project-details');
+
+        if (details) {
+            // Inject overview as first slide (once per panel)
+            if (!details.querySelector('.overview-slide')) {
+                const ovSec = document.createElement('div');
+                ovSec.className = 'details-section overview-slide skip-restructure';
+                const full = document.createElement('div');
+                full.className = 'slide-full';
+                const h4ov = document.createElement('h4');
+                h4ov.textContent = 'Overview';
+                full.appendChild(h4ov);
+                if (highlights) {
+                    const hl = highlights.cloneNode(true);
+                    hl.style.display = 'block'; hl.style.marginBottom = '1.25rem';
+                    full.appendChild(hl);
+                }
+                if (tech) {
+                    const tc = tech.cloneNode(true);
+                    full.appendChild(tc);
+                }
+                ovSec.appendChild(full);
+                details.insertBefore(ovSec, details.firstChild);
+            }
+
+            movedDetails = { el: details, parent: details.parentElement };
+            details.classList.add('open');
+            modalBody.appendChild(details);
+            initSlideshow(details);
+            const firstSlide = details.querySelector('.slide.active');
+            if (firstSlide) {
+                gsap.fromTo([...firstSlide.children],
+                    { opacity: 0, y: 12 },
+                    { opacity: 1, y: 0, duration: 0.4, stagger: 0.06, ease: 'power2.out', delay: 0.35 }
+                );
+                animatePipeline(firstSlide);
+            }
+        }
+
+        modalPanel.scrollTop = 0;
+
+        // ── Animation ────────────────────────────────────────────────
+        modalPanel.style.pointerEvents = 'all';
+        if (isSwap) {
+            gsap.fromTo(modalPanel,
+                { opacity: 0.6, scale: 0.97 },
+                { opacity: 1, scale: 1, duration: 0.22, ease: 'power2.out', xPercent: -50 }
+            );
+        } else {
+            modalOverlay.classList.add('open');
+            document.body.style.overflow = 'hidden';
+            gsap.fromTo(modalPanel,
+                { xPercent: -50, y: 28, scale: 0.93, opacity: 0 },
+                { xPercent: -50, y: 0, scale: 1, opacity: 1, duration: 0.45, ease: 'expo.out' }
+            );
+            gsap.fromTo(modalOverlay,
+                { opacity: 0 },
+                { opacity: 1, duration: 0.35, ease: 'power2.out' }
+            );
+        }
+    }
+
+    function closeProjectModal() {
+        if (!activeCard) return;
+        modalPanel.style.pointerEvents = 'none';
+        gsap.to(modalPanel, {
+            xPercent: -50, y: 18, scale: 0.94, opacity: 0,
+            duration: 0.3, ease: 'power2.in',
+            onComplete() {
+                if (movedDetails) {
+                    movedDetails.el.classList.remove('open');
+                    resetSlideshow(movedDetails.el);
+                    movedDetails.parent.appendChild(movedDetails.el);
+                    movedDetails = null;
+                }
+                activeCard = null;
+                document.getElementById('modal-body').innerHTML = '';
+                const mv = document.getElementById('modal-preview-vid');
+                if (mv._mazeEndHandler) { mv.removeEventListener('ended', mv._mazeEndHandler); mv._mazeEndHandler = null; }
+                mv.loop = true;
+                mv.pause(); mv.innerHTML = ''; mv.style.display = 'none';
+                document.getElementById('modal-preview-img').src = '';
+                document.getElementById('modal-preview-img').style.display = 'none';
+                const ms = document.getElementById('modal-preview-sim');
+                ms.src = ''; ms.style.display = 'none';
+                ms.closest('.modal-img-wrap').classList.remove('has-sim');
+            }
+        });
+        gsap.to(modalOverlay, { opacity: 0, duration: 0.28, ease: 'power2.in' });
+        modalOverlay.classList.remove('open');
+        document.body.style.overflow = '';
+    }
+
+    document.getElementById('modal-close').addEventListener('click', closeProjectModal);
+    modalOverlay.addEventListener('click', closeProjectModal);
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && activeCard) closeProjectModal(); });
+
+    /* ═══════════════════════════════════════════════════════════════
+       SLIDESHOW — tab-based panel system
+    ═══════════════════════════════════════════════════════════════ */
+
+    function getTabLabel(item) {
+        if (item.classList.contains('cfd-pipeline-wrap')) return 'Pipeline';
+        const h4 = item.querySelector('h4');
+        if (!h4) {
+            if (item.querySelector('video')) return 'Demo';
+            if (item.querySelector('iframe')) return 'Simulation';
+            return 'Slide';
+        }
+        return h4.textContent.trim().split(/\s+/).slice(0, 2).join(' ');
+    }
+
+    function getFullTitle(item) {
+        if (item.classList.contains('cfd-pipeline-wrap')) return 'CFD Simulation Pipeline';
+        const h4 = item.querySelector('h4');
+        if (!h4) {
+            if (item.querySelector('video')) return 'Demo Video';
+            if (item.querySelector('iframe')) return 'Interactive Simulation';
+            return 'Slide';
+        }
+        return h4.textContent.trim();
+    }
+
+    /**
+     * Reorganize a .details-section into two-column or full-width layout.
+     * Supports multiple images stacked in the left column.
+     */
+    function restructureSection(section) {
+        if (section.classList.contains('skip-restructure')) return;
+        const h4       = section.querySelector('h4');
+        const iframeEl = section.querySelector('iframe');
+        const allImgs  = [...section.querySelectorAll('img.details-image')];
+        const figNote  = section.querySelector('.figure-note');
+        const video    = section.querySelector('video');
+
+        // Pair each image with its caption (next sibling if it's a caption p)
+        const imgPairs = allImgs.map(img => {
+            const next = img.nextElementSibling;
+            const cap  = (next && next.classList.contains('details-image-caption')) ? next : null;
+            return { img, cap };
+        });
+
+        const videoCaption = section.querySelector('.project-video-caption');
+        const paras = [...section.querySelectorAll('p')].filter(p =>
+            !p.classList.contains('details-image-caption') &&
+            !p.classList.contains('project-video-caption')
+        );
+
+        // Detach everything before clearing
+        const toDetach = [h4, figNote, video, videoCaption, iframeEl,
+            ...allImgs, ...imgPairs.map(p => p.cap).filter(Boolean), ...paras];
+        toDetach.forEach(el => { if (el && el.parentNode) el.parentNode.removeChild(el); });
+        section.innerHTML = '';
+
+        if (iframeEl) {
+            const full = document.createElement('div');
+            full.className = 'slide-full';
+            if (h4) full.appendChild(h4);
+            paras.forEach(p => full.appendChild(p));
+            full.appendChild(iframeEl);
+            section.appendChild(full);
+            return;
+        }
+
+        if (video) {
+            const full = document.createElement('div');
+            full.className = 'slide-full';
+            if (h4) full.appendChild(h4);
+            video.style.cssText = 'width:100%;max-height:360px;display:block;border:1px solid var(--accent-border);margin-bottom:0.5rem;';
+            full.appendChild(video);
+            if (videoCaption) full.appendChild(videoCaption);
+            paras.forEach(p => full.appendChild(p));
+            section.appendChild(full);
+            return;
+        }
+
+        if (!allImgs.length && !figNote) {
+            const full = document.createElement('div');
+            full.className = 'slide-full';
+            if (h4) full.appendChild(h4);
+            paras.forEach(p => full.appendChild(p));
+            section.appendChild(full);
+            return;
+        }
+
+        // Title above, then two-column: image left, text right
+        const wrapper = document.createElement('div');
+        wrapper.className = 'slide-section-wrap';
+
+        if (h4) {
+            const titleRow = document.createElement('div');
+            titleRow.className = 'slide-section-title';
+            titleRow.appendChild(h4);
+            wrapper.appendChild(titleRow);
+        }
+
+        const twoCol = document.createElement('div');
+        twoCol.className = 'slide-two-col';
+
+        const imgZone = document.createElement('div');
+        imgZone.className = 'slide-img-zone';
+        if (allImgs.length) {
+            imgPairs.forEach(({ img, cap }) => {
+                imgZone.appendChild(img);
+                if (cap) imgZone.appendChild(cap);
+            });
+        } else if (figNote) {
+            imgZone.appendChild(figNote);
+        }
+
+        const textZone = document.createElement('div');
+        textZone.className = 'slide-text-zone';
+        paras.forEach(p => textZone.appendChild(p));
+
+        twoCol.appendChild(imgZone);
+        twoCol.appendChild(textZone);
+        wrapper.appendChild(twoCol);
+        section.appendChild(wrapper);
+    }
+
+    function goToSlide(ss, idx) {
+        const slides  = ss.querySelectorAll('.slide');
+        const tabs    = ss.querySelectorAll('.slide-tab');
+        const prevBtn = ss.querySelector('.slide-prev');
+        const nextBtn = ss.querySelector('.slide-next');
+        const counter = ss.querySelector('.slide-nav-counter');
+        const cur     = parseInt(ss.dataset.current || '0');
+
+        if (idx === cur || idx < 0 || idx >= slides.length) return;
+
+        const fromSlide = slides[cur];
+        const toSlide   = slides[idx];
+
+        gsap.to(fromSlide, {
+            opacity: 0, duration: 0.15, ease: 'power1.in',
+            onComplete() {
+                fromSlide.classList.remove('active');
+                fromSlide.style.display = 'none';
+                gsap.set(fromSlide, { opacity: 1 });
+                toSlide.style.display = 'block';
+                toSlide.classList.add('active');
+                gsap.fromTo(toSlide, { opacity: 0 }, { opacity: 1, duration: 0.25, ease: 'power2.out' });
+                animatePipeline(toSlide);
+            }
+        });
+
+        tabs.forEach((t, i) => t.classList.toggle('active', i === idx));
+        if (tabs[idx]) tabs[idx].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        ss.querySelectorAll('.slide-prev').forEach(b => b.disabled = idx === 0);
+        ss.querySelectorAll('.slide-next').forEach(b => b.disabled = idx === slides.length - 1);
+        counter.textContent = `${String(idx + 1).padStart(2, '0')} / ${String(slides.length).padStart(2, '0')}`;
+        ss.dataset.current = idx;
+    }
+
+    function initSlideshow(panel) {
+        if (panel.dataset.slideshowReady) return;
+        panel.dataset.slideshowReady = '1';
+
+        const items = [...panel.children].filter(el =>
+            el.matches('.details-section, .cfd-pipeline-wrap')
+        );
+        if (!items.length) return;
+
+        // Restructure each details-section into two-col/full layout
+        items.forEach(item => {
+            if (item.classList.contains('details-section')) restructureSection(item);
+        });
+
+        const ss = document.createElement('div');
+        ss.className = 'slideshow';
+        ss.dataset.current = '0';
+
+        // Tab bar
+        const tabBar = document.createElement('div');
+        tabBar.className = 'slide-tabs';
+        items.forEach((item, i) => {
+            const tab = document.createElement('button');
+            tab.className = 'slide-tab' + (i === 0 ? ' active' : '');
+            tab.textContent = getTabLabel(item);
+            tab.title = getFullTitle(item);
+            tab.addEventListener('click', () => goToSlide(ss, i));
+            tabBar.appendChild(tab);
+        });
+        ss.appendChild(tabBar);
+
+        // Slide viewport + side arrow buttons
+        const vp = document.createElement('div');
+        vp.className = 'slide-viewport';
+        items.forEach((item, i) => {
+            const slide = document.createElement('div');
+            slide.className = 'slide' + (i === 0 ? ' active' : '');
+            if (i > 0) slide.style.display = 'none';
+            slide.appendChild(item);
+            vp.appendChild(slide);
+        });
+        // Side arrows (desktop)
+        const prevSide = document.createElement('button');
+        prevSide.className = 'slide-side-btn slide-prev';
+        prevSide.setAttribute('aria-label', 'Previous');
+        prevSide.disabled = true;
+        prevSide.innerHTML = '&#8592;';
+        const nextSide = document.createElement('button');
+        nextSide.className = 'slide-side-btn slide-next';
+        nextSide.setAttribute('aria-label', 'Next');
+        nextSide.disabled = items.length <= 1;
+        nextSide.innerHTML = '&#8594;';
+        vp.appendChild(prevSide);
+        vp.appendChild(nextSide);
+        ss.appendChild(vp);
+
+        // Bottom nav: counter + mobile prev/next
+        const bottomNav = document.createElement('div');
+        bottomNav.className = 'slide-bottom-nav';
+        bottomNav.innerHTML = `
+            <button class="slide-nav-btn slide-prev" disabled>&#8592; Prev</button>
+            <span class="slide-nav-counter">01 / ${String(items.length).padStart(2, '0')}</span>
+            <button class="slide-nav-btn slide-next" ${items.length <= 1 ? 'disabled' : ''}>Next &#8594;</button>
+        `;
+        ss.appendChild(bottomNav);
+
+        // Click handlers for all prev/next buttons
+        ss.querySelectorAll('.slide-prev').forEach(btn =>
+            btn.addEventListener('click', () => goToSlide(ss, parseInt(ss.dataset.current) - 1)));
+        ss.querySelectorAll('.slide-next').forEach(btn =>
+            btn.addEventListener('click', () => goToSlide(ss, parseInt(ss.dataset.current) + 1)));
+
+        // Touch swipe
+        let touchX = 0;
+        vp.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; }, { passive: true });
+        vp.addEventListener('touchend', e => {
+            const dx = e.changedTouches[0].clientX - touchX;
+            if (Math.abs(dx) > 44) goToSlide(ss, parseInt(ss.dataset.current) + (dx < 0 ? 1 : -1));
+        }, { passive: true });
+
+        panel._keyHandler = e => {
+            if (!panel.classList.contains('open')) return;
+            if (e.key === 'ArrowRight') goToSlide(ss, parseInt(ss.dataset.current) + 1);
+            if (e.key === 'ArrowLeft')  goToSlide(ss, parseInt(ss.dataset.current) - 1);
+        };
+        document.addEventListener('keydown', panel._keyHandler);
+
+        panel.appendChild(ss);
+    }
+
+    function resetSlideshow(panel) {
+        const ss = panel.querySelector('.slideshow');
+        if (!ss) return;
+        const slides = ss.querySelectorAll('.slide');
+        const tabs   = ss.querySelectorAll('.slide-tab');
+        slides.forEach((s, i) => {
+            s.classList.toggle('active', i === 0);
+            s.style.display = i === 0 ? 'block' : 'none';
+            gsap.set(s, { opacity: 1 });
+        });
+        ss.dataset.current = '0';
+        tabs.forEach((t, i) => t.classList.toggle('active', i === 0));
+        const prev = ss.querySelector('.slide-prev');
+        const next = ss.querySelector('.slide-next');
+        const ctr  = ss.querySelector('.slide-nav-counter');
+        if (prev) prev.disabled = true;
+        if (next) next.disabled = slides.length <= 1;
+        if (ctr)  ctr.textContent = `01 / ${String(slides.length).padStart(2, '0')}`;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       TOGGLE — opens/closes the slideshow panel
+    ═══════════════════════════════════════════════════════════════ */
+    function toggleDetails(btn) {
+        btn.classList.toggle('active');
+        const panel     = btn.nextElementSibling;
+        const isOpening = !panel.classList.contains('open');
+
+        if (isOpening) {
+            initSlideshow(panel); // build slides once
+
+            panel.classList.add('open');
+            panel.style.height = 'auto';
+            const h = panel.offsetHeight;
+            panel.style.height = '0px';
+            panel.style.overflow = 'hidden';
+
+            gsap.to(panel, {
+                height: h, duration: 0.5, ease: 'power2.out',
+                onComplete() { panel.style.height = 'auto'; panel.style.overflow = ''; }
+            });
+
+            // Animate first slide content
+            const firstSlide = panel.querySelector('.slide.active');
+            if (firstSlide) {
+                gsap.fromTo([...firstSlide.children],
+                    { opacity: 0, y: 14 },
+                    { opacity: 1, y: 0, duration: 0.45, stagger: 0.08, ease: 'power2.out', delay: 0.2 }
+                );
+                animatePipeline(firstSlide);
+            }
+        } else {
+            gsap.to(panel, {
+                height: 0, duration: 0.35, ease: 'power2.in',
+                onComplete() {
+                    panel.classList.remove('open');
+                    panel.style.height = '';
+                    panel.style.overflow = '';
+                    resetSlideshow(panel);
+                }
+            });
+        }
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       CFD PIPELINE CONNECTOR ANIMATION
+    ═══════════════════════════════════════════════════════════════ */
+    function animatePipeline(container) {
+        const steps = container.querySelectorAll('.pipe-step');
+        const lines = container.querySelectorAll('.pipe-conn-line');
+        const arrows = container.querySelectorAll('.pipe-conn-arrow');
+        if (!steps.length) return;
+
+        const tl = gsap.timeline({ delay: 0.1 });
+        tl.fromTo(steps, { opacity:0, y:8 }, { opacity:1, y:0, duration:0.35, stagger:0.09, ease:'power2.out' });
+        lines.forEach((line, i) => {
+            tl.fromTo(line, { strokeDashoffset:48 }, { strokeDashoffset:0, duration:0.3, ease:'power1.out' }, i * 0.09 + 0.1);
+        });
+        tl.fromTo(arrows, { opacity:0 }, { opacity:1, duration:0.18, stagger:0.09 }, '-=0.35');
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       LIGHTBOX
+    ═══════════════════════════════════════════════════════════════ */
+    const lightbox    = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const lightboxCap = document.getElementById('lightbox-caption');
+
+    // Delegate: images may be created dynamically by slideshow
+    document.addEventListener('click', e => {
+        if (!e.target.classList.contains('details-image')) return;
+        const img = e.target;
+        lightboxImg.src = img.src;
+        lightboxImg.alt = img.alt;
+        const cap = img.nextElementSibling;
+        lightboxCap.textContent =
+            cap && cap.classList.contains('details-image-caption') ? cap.textContent : '';
+        lightbox.classList.add('open');
+        document.body.style.overflow = 'hidden';
+    });
+
+    function closeLightbox() {
+        lightbox.classList.remove('open');
+        document.body.style.overflow = '';
+        setTimeout(() => { lightboxImg.src = ''; }, 320);
+    }
+    lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+    /* ═══════════════════════════════════════════════════════════════
+       ACTIVE NAV ON SCROLL
+    ═══════════════════════════════════════════════════════════════ */
+    const navLinks = document.querySelectorAll('.nav-links a');
+    const sections = document.querySelectorAll('section[id]');
+
+    const navObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting)
+                navLinks.forEach(a =>
+                    a.classList.toggle('active', a.getAttribute('href') === '#' + entry.target.id));
+        });
+    }, { threshold: 0.4 });
+    sections.forEach(s => navObserver.observe(s));
+
+    // Interactive Airfoil button — always targets project 01's last slide
+    const _airfoilCard = document.querySelector('.projects-grid .project-card');
+    function interactiveAirfoilBtn(e) {
+        e.stopPropagation();
+        function jumpToLast() {
+            const ss = document.querySelector('#modal-body .slideshow');
+            if (ss) {
+                const slides = ss.querySelectorAll('.slide');
+                goToSlide(ss, slides.length - 1);
+            }
+        }
+        if (activeCard === _airfoilCard) {
+            jumpToLast();
+        } else {
+            openProjectModal(_airfoilCard);
+            setTimeout(jumpToLast, 450);
+        }
+    }
+
+    // Maze robot card video: loop from 2s
+    const mazeVid = document.getElementById('maze-card-video');
+    if (mazeVid) {
+        mazeVid.addEventListener('loadedmetadata', () => { mazeVid.currentTime = 2; });
+        mazeVid.addEventListener('ended', () => { mazeVid.currentTime = 2; mazeVid.play(); });
+    }
+
+    </script>
+</body>
+</html>
